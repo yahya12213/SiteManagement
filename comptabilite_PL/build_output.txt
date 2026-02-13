@@ -1,0 +1,261 @@
+
+> systeme-de-calcul@0.0.0 build
+> tsc -b && vite build
+
+src/components/admin/ImportCitiesModal.tsx(61,18): error TS2345: Argument of type '{ success: number; errors: Array<{ row: number; error: string; data: ImportCityData; }>; }' is not assignable to parameter of type 'SetStateAction<{ success: number; errors: { row: number; error: string; data: ImportCityData; }[]; } | null>'.
+  Type '{ success: number; errors: Array<{ row: number; error: string; data: ImportCityData; }>; }' is not assignable to type '{ success: number; errors: { row: number; error: string; data: ImportCityData; }[]; }'.
+    Types of property 'errors' are incompatible.
+      Type '{ row: number; error: string; data: import("C:/Users/pc/Desktop/systeme de calcul/src/hooks/useCities").ImportCityData; }[]' is not assignable to type '{ row: number; error: string; data: ImportCityData; }[]'.
+        Type '{ row: number; error: string; data: import("C:/Users/pc/Desktop/systeme de calcul/src/hooks/useCities").ImportCityData; }' is not assignable to type '{ row: number; error: string; data: ImportCityData; }'.
+          Types of property 'data' are incompatible.
+            Property 'code' is missing in type 'import("C:/Users/pc/Desktop/systeme de calcul/src/hooks/useCities").ImportCityData' but required in type 'ImportCityData'.
+src/hooks/useAdminDeclarations.ts(116,17): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/hooks/useAdminDeclarations.ts(142,17): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/hooks/useAdminDeclarations.ts(168,17): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/hooks/useCalculationSheets.ts(166,9): error TS2698: Spread types may only be created from object types.
+src/hooks/useCalculationSheets.ts(192,19): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/hooks/useCalculationSheets.ts(289,31): error TS2339: Property 'status' does not exist on type 'never'.
+src/hooks/useCalculationSheets.ts(293,17): error TS2345: Argument of type '{ status: string; }' is not assignable to parameter of type 'never'.
+src/hooks/useCalculationSheets.ts(329,30): error TS2339: Property 'title' does not exist on type 'never'.
+src/hooks/useCalculationSheets.ts(330,35): error TS2339: Property 'template_data' does not exist on type 'never'.
+src/hooks/useCities.ts(29,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[]>'.
+      Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+          Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+            Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'unique symbol | QueryFunction<City[], readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 3 of 3, '(options: UseQueryOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'unique symbol | QueryFunction<City[], readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+src/hooks/useCities.ts(59,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<City | null, Error, City | null, readonly unknown[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'QueryFunction<City | null, readonly unknown[]>'.
+      Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'City | Promise<City | null> | null'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'Promise<City | null>'.
+          Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null' is not assignable to type 'City | null'.
+            Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<City | null, Error, City | null, readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'unique symbol | QueryFunction<City | null, readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'QueryFunction<City | null, readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'City | Promise<City | null> | null'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'Promise<City | null>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null' is not assignable to type 'City | null'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 3 of 3, '(options: UseQueryOptions<City | null, Error, City | null, readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<City | null, Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'unique symbol | QueryFunction<City | null, readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'QueryFunction<City | null, readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'City | Promise<City | null> | null'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null>' is not assignable to type 'Promise<City | null>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; } | null' is not assignable to type 'City | null'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+src/hooks/useCities.ts(78,18): error TS2339: Property 'id' does not exist on type 'never'.
+src/hooks/useCities.ts(79,20): error TS2339: Property 'name' does not exist on type 'never'.
+src/hooks/useCities.ts(80,26): error TS2339: Property 'segment_id' does not exist on type 'never'.
+src/hooks/useCities.ts(82,26): error TS2339: Property 'created_at' does not exist on type 'never'.
+src/hooks/useCities.ts(93,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[]>'.
+      Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+          Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+            Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'unique symbol | QueryFunction<City[], readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+  Overload 3 of 3, '(options: UseQueryOptions<City[], Error, City[], readonly unknown[]>, queryClient?: QueryClient | undefined): UseQueryResult<City[], Error>', gave the following error.
+    Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'unique symbol | QueryFunction<City[], readonly unknown[], never> | undefined'.
+      Type '() => Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'QueryFunction<City[], readonly unknown[], never>'.
+        Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'City[] | Promise<City[]>'.
+          Type 'Promise<{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]>' is not assignable to type 'Promise<City[]>'.
+            Type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }[]' is not assignable to type 'City[]'.
+              Property 'code' is missing in type '{ id: any; name: any; segment_id: any; segment_name: any; created_at: any; }' but required in type 'City'.
+src/hooks/useCities.ts(129,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "cities", never, "POST">', gave the following error.
+    Argument of type '{ id: string; name: string; segment_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "cities", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/hooks/useCities.ts(154,17): error TS2345: Argument of type '{ name: string; segment_id: string; }' is not assignable to parameter of type 'never'.
+src/hooks/useCities.ts(241,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "cities", never, "POST">', gave the following error.
+    Argument of type '{ id: string; name: string; segment_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "cities", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/hooks/useGerantDeclarations.ts(305,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_declarations", never, "POST">', gave the following error.
+    Argument of type '{ id: string; professor_id: string; calculation_sheet_id: string; segment_id: string; city_id: string; start_date: string; end_date: string; form_data: string; status: string; created_by: string; creator_role: "professor" | "gerant" | "admin"; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_declarations", never, "POST">', gave the following error.
+    Argument of type '{ id: string; professor_id: string; calculation_sheet_id: string; segment_id: string; city_id: string; start_date: string; end_date: string; form_data: string; status: string; created_by: string; creator_role: "professor" | "gerant" | "admin"; }' is not assignable to parameter of type 'never[]'.
+      Type '{ id: string; professor_id: string; calculation_sheet_id: string; segment_id: string; city_id: string; start_date: string; end_date: string; form_data: string; status: string; created_by: string; creator_role: "admin" | ... 1 more ... | "gerant"; }' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
+src/hooks/useProfessorDeclarations.ts(168,9): error TS2698: Spread types may only be created from object types.
+src/hooks/useProfessorDeclarations.ts(280,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_declarations", never, "POST">', gave the following error.
+    Argument of type '{ id: string; professor_id: string; calculation_sheet_id: string; segment_id: string; city_id: string; start_date: string; end_date: string; form_data: string; status: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_declarations", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/hooks/useProfessorDeclarations.ts(295,19): error TS2339: Property 'id' does not exist on type 'never'.
+src/hooks/useProfessorDeclarations.ts(313,17): error TS2345: Argument of type '{ form_data: string; }' is not assignable to parameter of type 'never'.
+src/hooks/useProfessorDeclarations.ts(335,17): error TS2345: Argument of type '{ status: string; submitted_at: string; }' is not assignable to parameter of type 'never'.
+src/hooks/useProfessors.ts(82,9): error TS2698: Spread types may only be created from object types.
+src/hooks/useProfessors.ts(99,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "profiles", never, "POST">', gave the following error.
+    Argument of type '{ id: string; username: string; password: string; full_name: string; role: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "profiles", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/hooks/useProfessors.ts(135,17): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/hooks/useProfessors.ts(219,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_cities", never, "POST">', gave the following error.
+    Argument of type '{ professor_id: string; city_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_cities", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'professor_id' does not exist in type 'never[]'.
+src/hooks/useProfessors.ts(300,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_segments", never, "POST">', gave the following error.
+    Argument of type '{ professor_id: string; segment_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_segments", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'professor_id' does not exist in type 'never[]'.
+src/hooks/useSegments.ts(74,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "segments", never, "POST">', gave the following error.
+    Argument of type '{ id: string; name: string; color: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "segments", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/hooks/useSegments.ts(99,17): error TS2345: Argument of type '{ name: string; color: string; }' is not assignable to parameter of type 'never'.
+src/hooks/useUsers.ts(111,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "profiles", never, "POST">', gave the following error.
+    Argument of type '{ id: string; username: string; password: string; full_name: string; role: "admin" | "professor" | "gerant"; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "profiles", never, "POST">', gave the following error.
+    Argument of type '{ id: string; username: string; password: string; full_name: string; role: "admin" | "professor" | "gerant"; }' is not assignable to parameter of type 'never[]'.
+      Type '{ id: string; username: string; password: string; full_name: string; role: "admin" | "professor" | "gerant"; }' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
+src/hooks/useUsers.ts(135,17): error TS2345: Argument of type '{ username?: string | undefined; password?: string | undefined; full_name?: string | undefined; role?: "admin" | "professor" | "gerant" | undefined; }' is not assignable to parameter of type 'never'.
+src/hooks/useUsers.ts(245,19): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_segments" | "gerant_segments", never, "POST">', gave the following error.
+    Argument of type '{ [x: string]: string; segment_id: string; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_segments" | "gerant_segments", never, "POST">', gave the following error.
+    Argument of type '{ [x: string]: string; segment_id: string; }[]' is not assignable to parameter of type 'never[]'.
+      Type '{ [x: string]: string; segment_id: string; }' is not assignable to type 'never'.
+src/hooks/useUsers.ts(281,19): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated" | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_cities" | "gerant_cities", never, "POST">', gave the following error.
+    Argument of type '{ [x: string]: string; city_id: string; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated" | undefined; defaultToNull?: boolean | undefined; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "professor_cities" | "gerant_cities", never, "POST">', gave the following error.
+    Argument of type '{ [x: string]: string; city_id: string; }[]' is not assignable to parameter of type 'never[]'.
+      Type '{ [x: string]: string; city_id: string; }' is not assignable to type 'never'.
+src/lib/formula/dependency.ts(1,48): error TS6196: 'FormulaError' is declared but never used.
+src/lib/formula/dependency.ts(1,62): error TS6196: 'FormulaValue' is declared but never used.
+src/lib/formula/parser.ts(153,11): error TS2367: This comparison appears to be unintentional because the types '"("' and '")"' have no overlap.
+src/lib/utils/canvasSerializer.ts(1,10): error TS2305: Module '"fabric"' has no exported member 'fabric'.
+src/lib/utils/formulaEngine.ts(22,5): error TS2322: Type 'string' is not assignable to type 'number'.
+src/lib/utils/formulaEngine.ts(51,7): error TS2322: Type 'string | number | boolean | DetailedCellError' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+src/lib/utils/formulaEngine.ts(117,13): error TS2322: Type 'string' is not assignable to type 'number'.
+src/lib/utils/formulaEngine.ts(123,33): error TS2322: Type 'string' is not assignable to type 'number'.
+src/lib/utils/formulaEngine.ts(124,45): error TS2322: Type 'string' is not assignable to type 'number'.
+src/lib/utils/formulaEngine.ts(127,27): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/pages/admin/CalculationSheetEditor.tsx(973,21): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/CalculationSheets.tsx(22,22): error TS6133: 'setCanvasSize' is declared but its value is never read.
+src/pages/admin/CalculationSheets.tsx(149,13): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/CalculationSheets.tsx(178,15): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/CalculationSheets.tsx(211,15): error TS2322: Type 'string | number | boolean | null' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/CalculationSheetsList.tsx(24,20): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/CalculationSheetsList.tsx(205,52): error TS7006: Parameter 'city' implicitly has an 'any' type.
+src/pages/admin/CalculationSheetsList.tsx(336,33): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/CalculationSheetsList.tsx(416,30): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/CalculationSheetsList.tsx(450,40): error TS7006: Parameter 'city' implicitly has an 'any' type.
+src/pages/admin/CalculationSheetsList.tsx(518,33): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/CalculationSheetsList.tsx(599,30): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/CalculationSheetsList.tsx(633,40): error TS7006: Parameter 'city' implicitly has an 'any' type.
+src/pages/admin/Cities.tsx(20,33): error TS2339: Property 'filter' does not exist on type 'never[] | NoInfer<TQueryFnData>'.
+  Property 'filter' does not exist on type 'NoInfer<TQueryFnData>'.
+src/pages/admin/DeclarationsManagement.tsx(3,73): error TS6133: 'Eye' is declared but its value is never read.
+src/pages/admin/DeclarationsManagement.tsx(111,9): error TS6133: 'handleApprove' is declared but its value is never read.
+src/pages/admin/DeclarationsManagement.tsx(325,35): error TS2345: Argument of type '(professor: string) => JSX.Element' is not assignable to parameter of type '(value: string | undefined, index: number, array: (string | undefined)[]) => Element'.
+  Types of parameters 'professor' and 'value' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/pages/admin/DeclarationsManagement.tsx(344,31): error TS2345: Argument of type '(city: string) => JSX.Element' is not assignable to parameter of type '(value: string | undefined, index: number, array: (string | undefined)[]) => Element'.
+  Types of parameters 'city' and 'value' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/pages/admin/DeclarationsManagement.tsx(363,33): error TS2345: Argument of type '(segment: string) => JSX.Element' is not assignable to parameter of type '(value: string | undefined, index: number, array: (string | undefined)[]) => Element'.
+  Types of parameters 'segment' and 'value' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/pages/admin/DeclarationsManagement.tsx(395,38): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ brouillon: { label: string; color: string; bgColor: string; hoverColor: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 4 more ...; refusee: { ...; }; }'.
+src/pages/admin/DeclarationsManagement.tsx(396,34): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ brouillon: { label: string; color: string; bgColor: string; hoverColor: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 4 more ...; refusee: { ...; }; }'.
+src/pages/admin/DeclarationViewer.tsx(220,13): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/DeclarationViewer.tsx(244,13): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/DeclarationViewer.tsx(271,13): error TS2322: Type 'string | number | boolean | null' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/admin/DeclarationViewer.tsx(368,25): error TS2345: Argument of type 'string | number | boolean | null' is not assignable to parameter of type 'SetStateAction<any[]>'.
+  Type 'null' is not assignable to type 'SetStateAction<any[]>'.
+src/pages/admin/DeclarationViewer.tsx(549,21): error TS7053: Element implicitly has an 'any' type because expression of type '"brouillon" | "soumise" | "en_cours" | "approuvee" | "refusee" | "a_declarer"' can't be used to index type '{ brouillon: { label: string; color: string; }; soumise: { label: string; color: string; }; en_cours: { label: string; color: string; }; approuvee: { label: string; color: string; }; refusee: { label: string; color: string; }; }'.
+  Property 'a_declarer' does not exist on type '{ brouillon: { label: string; color: string; }; soumise: { label: string; color: string; }; en_cours: { label: string; color: string; }; approuvee: { label: string; color: string; }; refusee: { label: string; color: string; }; }'.
+src/pages/admin/DeclarationViewer.tsx(552,20): error TS7053: Element implicitly has an 'any' type because expression of type '"brouillon" | "soumise" | "en_cours" | "approuvee" | "refusee" | "a_declarer"' can't be used to index type '{ brouillon: { label: string; color: string; }; soumise: { label: string; color: string; }; en_cours: { label: string; color: string; }; approuvee: { label: string; color: string; }; refusee: { label: string; color: string; }; }'.
+  Property 'a_declarer' does not exist on type '{ brouillon: { label: string; color: string; }; soumise: { label: string; color: string; }; en_cours: { label: string; color: string; }; approuvee: { label: string; color: string; }; refusee: { label: string; color: string; }; }'.
+src/pages/gerant/GerantDeclarations.tsx(6,29): error TS6133: 'CardHeader' is declared but its value is never read.
+src/pages/gerant/GerantDeclarations.tsx(6,41): error TS6133: 'CardTitle' is declared but its value is never read.
+src/pages/professor/DeclarationForm.tsx(3,46): error TS6133: 'Eye' is declared but its value is never read.
+src/pages/professor/DeclarationForm.tsx(20,10): error TS6133: 'uploadedFiles' is declared but its value is never read.
+src/pages/professor/DeclarationForm.tsx(20,25): error TS6133: 'setUploadedFiles' is declared but its value is never read.
+src/pages/professor/DeclarationForm.tsx(86,17): error TS2345: Argument of type '(prev: FormulaContext) => { [x: string]: string | number | boolean | never[] | null; }' is not assignable to parameter of type 'SetStateAction<FormulaContext>'.
+  Type '(prev: FormulaContext) => { [x: string]: string | number | boolean | never[] | null; }' is not assignable to type '(prevState: FormulaContext) => FormulaContext'.
+    Type '{ [x: string]: string | number | boolean | never[] | null; }' is not assignable to type 'FormulaContext'.
+      'string' index signatures are incompatible.
+        Type 'string | number | boolean | never[] | null' is not assignable to type 'string | number | boolean | null'.
+          Type 'never[]' is not assignable to type 'string | number | boolean | null'.
+src/pages/professor/DeclarationForm.tsx(107,17): error TS2345: Argument of type '(prev: FormulaContext) => { [x: string]: string | number | boolean | any[] | null; }' is not assignable to parameter of type 'SetStateAction<FormulaContext>'.
+  Type '(prev: FormulaContext) => { [x: string]: string | number | boolean | any[] | null; }' is not assignable to type '(prevState: FormulaContext) => FormulaContext'.
+    Type '{ [x: string]: string | number | boolean | any[] | null; }' is not assignable to type 'FormulaContext'.
+      'string' index signatures are incompatible.
+        Type 'string | number | boolean | any[] | null' is not assignable to type 'string | number | boolean | null'.
+          Type 'any[]' is not assignable to type 'string | number | boolean | null'.
+src/pages/professor/DeclarationForm.tsx(121,15): error TS2345: Argument of type '(prev: FormulaContext) => { [x: string]: string | number | boolean | any[] | null; }' is not assignable to parameter of type 'SetStateAction<FormulaContext>'.
+  Type '(prev: FormulaContext) => { [x: string]: string | number | boolean | any[] | null; }' is not assignable to type '(prevState: FormulaContext) => FormulaContext'.
+    Type '{ [x: string]: string | number | boolean | any[] | null; }' is not assignable to type 'FormulaContext'.
+      'string' index signatures are incompatible.
+        Type 'string | number | boolean | any[] | null' is not assignable to type 'string | number | boolean | null'.
+          Type 'any[]' is not assignable to type 'string | number | boolean | null'.
+src/pages/professor/DeclarationForm.tsx(212,13): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/professor/DeclarationForm.tsx(236,13): error TS2322: Type 'string | number | true' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'true' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/professor/DeclarationForm.tsx(263,13): error TS2322: Type 'string | number | boolean | null' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/pages/professor/DeclarationForm.tsx(321,24): error TS18047: 'files' is possibly 'null'.
+src/pages/professor/DeclarationForm.tsx(321,30): error TS2339: Property 'length' does not exist on type 'string | number | boolean | never[]'.
+  Property 'length' does not exist on type 'number'.
+src/pages/professor/DeclarationForm.tsx(340,61): error TS18047: 'files' is possibly 'null'.
+src/pages/professor/DeclarationForm.tsx(340,67): error TS2339: Property 'length' does not exist on type 'string | number | boolean | never[]'.
+  Property 'length' does not exist on type 'number'.
+src/pages/professor/DeclarationForm.tsx(370,18): error TS18047: 'files' is possibly 'null'.
+src/pages/professor/DeclarationForm.tsx(370,24): error TS2339: Property 'map' does not exist on type 'string | number | boolean | never[]'.
+  Property 'map' does not exist on type 'string'.
+src/pages/professor/DeclarationForm.tsx(582,8): error TS2367: This comparison appears to be unintentional because the types '"brouillon" | "soumise" | "en_cours" | "approuvee" | "refusee"' and '"a_declarer"' have no overlap.
+src/pages/professor/Declarations.tsx(96,42): error TS2367: This comparison appears to be unintentional because the types '"brouillon" | "soumise" | "en_cours" | "approuvee" | "refusee"' and '"a_declarer"' have no overlap.
+src/pages/professor/Declarations.tsx(194,105): error TS2367: This comparison appears to be unintentional because the types '"soumise" | "en_cours" | "approuvee"' and '"a_declarer"' have no overlap.
+src/pages/professor/Declarations.tsx(199,104): error TS2367: This comparison appears to be unintentional because the types '"soumise" | "en_cours" | "approuvee"' and '"a_declarer"' have no overlap.
+src/pages/professor/Declarations.tsx(207,67): error TS2367: This comparison appears to be unintentional because the types '"soumise" | "en_cours" | "approuvee" | "refusee"' and '"a_declarer"' have no overlap.

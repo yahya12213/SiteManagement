@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exécution des Migrations - Comptabilité PL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-4xl mx-auto px-4">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">🚀 Exécution des Migrations</h1>
+            <p class="text-gray-600">Système de Permissions - Comptabilité PL</p>
+            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-sm text-blue-800">
+                    <strong>⚠️ Important :</strong> Exécutez les migrations <strong>dans l'ordre</strong> (1 → 2 → 3)
+                </p>
+            </div>
+        </div>
+
+        <!-- Migration 1: Role Sync -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-start">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-100 text-purple-600 font-bold mr-4">
+                        1
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Migration Role Sync</h2>
+                        <p class="text-sm text-gray-600 mt-1">Synchronise profiles.role_id avec profiles.role</p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            <strong>Endpoint:</strong> /api/migration-fix-role-sync/run
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                onclick="runMigration('migration-fix-role-sync', 1)"
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+            >
+                ▶️ Exécuter Migration 1
+            </button>
+
+            <div id="status-1" class="hidden mt-4 p-4 rounded-lg"></div>
+            <div id="result-1" class="hidden mt-4 p-4 bg-gray-50 rounded-lg overflow-auto max-h-64">
+                <pre class="text-xs"></pre>
+            </div>
+        </div>
+
+        <!-- Migration 2: Commercialisation Permissions -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-start">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold mr-4">
+                        2
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Migration Commercialisation</h2>
+                        <p class="text-sm text-gray-600 mt-1">Crée 33 permissions pour le module commercialisation</p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            <strong>Endpoint:</strong> /api/migration-053/run
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                onclick="runMigration('migration-053', 2)"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+            >
+                ▶️ Exécuter Migration 2
+            </button>
+
+            <div id="status-2" class="hidden mt-4 p-4 rounded-lg"></div>
+            <div id="result-2" class="hidden mt-4 p-4 bg-gray-50 rounded-lg overflow-auto max-h-64">
+                <pre class="text-xs"></pre>
+            </div>
+        </div>
+
+        <!-- Migration 3: Assign All to Gérant -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-start">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 font-bold mr-4">
+                        3
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Migration Assign All to Gérant</h2>
+                        <p class="text-sm text-gray-600 mt-1">Assigne toutes les permissions au rôle gérant</p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            <strong>Endpoint:</strong> /api/migration-054/run
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                onclick="runMigration('migration-054', 3)"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+            >
+                ▶️ Exécuter Migration 3
+            </button>
+
+            <div id="status-3" class="hidden mt-4 p-4 rounded-lg"></div>
+            <div id="result-3" class="hidden mt-4 p-4 bg-gray-50 rounded-lg overflow-auto max-h-64">
+                <pre class="text-xs"></pre>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">📋 Instructions Après Migration</h2>
+            <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                <li class="pl-2">Connectez-vous en tant qu'<strong>admin</strong></li>
+                <li class="pl-2">Allez dans <strong>Utilisateurs</strong></li>
+                <li class="pl-2">Cherchez l'utilisateur <strong>"khalid fathi"</strong></li>
+                <li class="pl-2">Modifiez son rôle de <strong>"professor"</strong> à <strong>"gerant"</strong></li>
+                <li class="pl-2">Sauvegardez</li>
+                <li class="pl-2">Déconnectez et reconnectez l'utilisateur gérant</li>
+                <li class="pl-2">✅ Plus d'erreurs 403 !</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://comptabilitepl-production.up.railway.app';
+
+        async function runMigration(migrationName, number) {
+            const statusDiv = document.getElementById(`status-${number}`);
+            const resultDiv = document.getElementById(`result-${number}`);
+            const resultPre = resultDiv.querySelector('pre');
+            const button = event.target;
+
+            // Disable button
+            button.disabled = true;
+            button.classList.add('opacity-50', 'cursor-not-allowed');
+            button.textContent = '⏳ Exécution en cours...';
+
+            // Show loading status
+            statusDiv.className = 'mt-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200';
+            statusDiv.innerHTML = '<p class="text-yellow-800">⏳ Exécution de la migration...</p>';
+            statusDiv.classList.remove('hidden');
+
+            // Hide previous result
+            resultDiv.classList.add('hidden');
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/${migrationName}/run`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Success
+                    statusDiv.className = 'mt-4 p-4 rounded-lg bg-green-50 border border-green-200';
+                    statusDiv.innerHTML = `
+                        <p class="text-green-800 font-semibold">✅ Migration ${number} exécutée avec succès !</p>
+                        <p class="text-green-700 text-sm mt-1">${data.message || 'Opération terminée'}</p>
+                    `;
+
+                    // Show result
+                    resultPre.textContent = JSON.stringify(data, null, 2);
+                    resultDiv.classList.remove('hidden');
+
+                    // Re-enable button with different text
+                    button.textContent = '✅ Migration Complétée';
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                    button.classList.add('bg-green-600');
+                } else {
+                    // Error
+                    throw new Error(data.error || data.message || 'Erreur inconnue');
+                }
+            } catch (error) {
+                // Error handling
+                statusDiv.className = 'mt-4 p-4 rounded-lg bg-red-50 border border-red-200';
+                statusDiv.innerHTML = `
+                    <p class="text-red-800 font-semibold">❌ Erreur lors de l'exécution</p>
+                    <p class="text-red-700 text-sm mt-1">${error.message}</p>
+                `;
+
+                // Show error details
+                resultPre.textContent = error.stack || error.toString();
+                resultDiv.classList.remove('hidden');
+
+                // Re-enable button
+                button.disabled = false;
+                button.classList.remove('opacity-50', 'cursor-not-allowed');
+                button.textContent = '🔄 Réessayer';
+            }
+        }
+    </script>
+</body>
+</html>

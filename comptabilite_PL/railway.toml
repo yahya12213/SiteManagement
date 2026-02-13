@@ -1,0 +1,19 @@
+# Railway deployment configuration
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm start"
+
+# Persistent storage for uploaded files (student photos, etc.)
+# Volume must be created manually in Railway Dashboard:
+# 1. Go to your service → Settings → Volumes
+# 2. Click "New Volume"
+# 3. Set Mount Path: /app/server/uploads
+# 4. Click "Add"
+[volumes]
+uploads = "/app/server/uploads"
+
+[watch]
+patterns = ["**"]

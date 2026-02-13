@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Run Migration on Railway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 10px;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3B82F6;
+        }
+        button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #2563EB;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Migration: Fix Sheet Filtering</h1>
+
+        <div class="step">
+            <h2>Step 1: Enter your Railway URL</h2>
+            <p>Enter the URL of your Railway deployment (without https://)</p>
+            <input type="text" id="railwayUrl" placeholder="e.g., your-app.up.railway.app" value="">
+            <p style="color: #666; font-size: 14px;">
+                You can find this in your Railway dashboard under "Deployments" → "View Logs" → URL in the header
+            </p>
+        </div>
+
+        <div class="step">
+            <h2>Step 2: Run the Migration</h2>
+            <p>This will fix the "Charge Centre Prolean" appearing for Sidi Slimane issue</p>
+            <button onclick="runMigration()">▶️ Run Migration</button>
+            <button onclick="runDiagnostic()">🔍 Check Current Status</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <div class="step" style="background: #fff3cd; border-left-color: #ffc107;">
+            <h3>⚠️ Manual Alternative</h3>
+            <p>If the buttons don't work, you can run the migration manually using:</p>
+            <ol>
+                <li>Open Postman or Thunder Client</li>
+                <li>Make a POST request to: <code id="migrationUrl">https://YOUR-RAILWAY-URL/api/migration-fix-segments-and-sheets/run</code></li>
+                <li>Then GET: <code id="diagnosticUrl">https://YOUR-RAILWAY-URL/api/calculation-sheets/diagnostic</code> to verify</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function updateUrls() {
+            const url = document.getElementById('railwayUrl').value;
+            if (url) {
+                document.getElementById('migrationUrl').textContent = `https://${url}/api/migration-fix-segments-and-sheets/run`;
+                document.getElementById('diagnosticUrl').textContent = `https://${url}/api/calculation-sheets/diagnostic`;
+            }
+        }
+
+        document.getElementById('railwayUrl').addEventListener('input', updateUrls);
+
+        async function runMigration() {
+            const railwayUrl = document.getElementById('railwayUrl').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!railwayUrl) {
+                alert('Please enter your Railway URL first');
+                return;
+            }
+
+            resultDiv.innerHTML = '⏳ Running migration...';
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`https://${railwayUrl}/api/migration-fix-segments-and-sheets/run`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3>✅ Migration Successful!</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <p>Now click "Check Current Status" to verify the fix</p>
+                    `;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3>❌ Migration Failed</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <p>Try using the manual method below</p>
+                    `;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                    <p>This might be due to CORS. Try using the manual method below with Postman or curl.</p>
+                `;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function runDiagnostic() {
+            const railwayUrl = document.getElementById('railwayUrl').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!railwayUrl) {
+                alert('Please enter your Railway URL first');
+                return;
+            }
+
+            resultDiv.innerHTML = '🔍 Checking sheet associations...';
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`https://${railwayUrl}/api/calculation-sheets/diagnostic`);
+                const data = await response.json();
+
+                if (response.ok && data.sheets) {
+                    const chargeCentre = data.sheets.find(s => s.title && s.title.includes('Charge Centre Prolean'));
+                    const proleanFiche = data.sheets.find(s => s.title === 'Prolean Fiche de calcule');
+
+                    let html = '<h3>📊 Current Sheet Associations</h3>';
+
+                    if (chargeCentre) {
+                        const hasSidiSlimane = chargeCentre.cities?.some(c => c.includes('Sidi Slimane'));
+                        html += `
+                            <h4>"Charge Centre Prolean":</h4>
+                            <ul>
+                                <li>Cities: ${chargeCentre.cities?.join(', ') || 'None'}</li>
+                                <li>Status: ${hasSidiSlimane ? '⚠️ PROBLEM - Associated with Sidi Slimane' : '✅ GOOD - Not associated with Sidi Slimane'}</li>
+                            </ul>
+                        `;
+                    }
+
+                    if (proleanFiche) {
+                        html += `
+                            <h4>"Prolean Fiche de calcule":</h4>
+                            <ul>
+                                <li>Cities: ${proleanFiche.cities?.join(', ') || 'None'}</li>
+                            </ul>
+                        `;
+                    }
+
+                    resultDiv.innerHTML = html;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3>Response:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                    resultDiv.className = 'result';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                    <p>This might be due to CORS. Try accessing the URL directly in your browser or use Postman.</p>
+                `;
+                resultDiv.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html>

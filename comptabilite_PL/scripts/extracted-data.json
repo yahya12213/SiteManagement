@@ -1,0 +1,656 @@
+{
+  "profiles": [
+    {
+      "id": "admin-001",
+      "username": "admin",
+      "password_hash": "admin123",
+      "full_name": "Administrateur",
+      "role": "admin",
+      "created_at": "2025-10-19 15:01:34",
+      "updated_at": "2025-10-19 15:01:34"
+    },
+    {
+      "id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "username": "khalidfathi",
+      "password_hash": "khalidfathi",
+      "full_name": "KHALIDFATHI",
+      "role": "professor",
+      "created_at": "2025-10-19 15:03:24",
+      "updated_at": "2025-10-19 15:03:24"
+    }
+  ],
+  "segments": [
+    {
+      "id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "name": "Diray",
+      "color": "#13ae66",
+      "logo_url": "",
+      "created_at": "2025-10-19 15:17:37"
+    },
+    {
+      "id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "name": "Prolean",
+      "color": "#e09410",
+      "logo_url": "",
+      "created_at": "2025-10-19 15:18:04"
+    }
+  ],
+  "cities": [
+    {
+      "id": "6c73e4ab-b42c-4833-afd4-aafc880a3a20",
+      "name": "Berkane",
+      "code": "A1P01",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "2643cf46-85b3-4ad7-9c8c-c400badd63e0",
+      "name": "Errachidia",
+      "code": "A1P02",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "74c2aa27-aa5b-4be0-b2bd-9be040df1839",
+      "name": "El jadida",
+      "code": "A1P03",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "a4d8c7f4-3be2-435a-a627-90c840c7f913",
+      "name": "Berrechid",
+      "code": "A1P04",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "8ed4d5c8-75af-4da8-8c93-87d3b1551229",
+      "name": "Khenifra",
+      "code": "A1P05",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "657b4a95-f8cc-4879-a552-a0c667c4cdf5",
+      "name": "Tanger",
+      "code": "A1P06",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "12e0f69e-ae6c-4161-bb4f-6cb82534f264",
+      "name": "Casablanca",
+      "code": "A1P07",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "7c0f4c39-82eb-45d3-8392-7dfb8af37515",
+      "name": "OUARZAZATE",
+      "code": "A1P08",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "deed4f0f-6bc6-4005-a35e-7a13dd54c0b5",
+      "name": "Beni Mellal",
+      "code": "A1P09",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "c88695a3-620a-4fa7-8597-8cd19c8376bf",
+      "name": "Nador",
+      "code": "A1P10",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "8d649ba7-a21a-493e-8819-f304a1e3cca0",
+      "name": "IMZOUREN",
+      "code": "A1P11",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "1eff25f1-da4d-43ef-ace6-ddc911e4f669",
+      "name": "Tetouan",
+      "code": "A1P12",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "0cd77f84-4004-493f-adc2-82fefc6ced8e",
+      "name": "Sidi Slimane",
+      "code": "A1P13",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "11f17ee0-da76-4b35-a30e-a4d274c9a02e",
+      "name": "Oujda",
+      "code": "A1P14",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "8c348ada-dd52-4581-9cf2-1eef6cf659c0",
+      "name": "Temara",
+      "code": "A1P15",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "4865fda2-9902-48ce-8f7f-f2d7658a1b66",
+      "name": "Mohammedia",
+      "code": "A1P16",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "c8f4247c-0b83-435b-8200-e06b2c505198",
+      "name": "Fes",
+      "code": "A1P18",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "5e97fc12-a072-4ef4-905c-ef9228380afd",
+      "name": "Agadir",
+      "code": "A1P19",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "5b938e23-01b7-4ff7-ba14-191b21a89849",
+      "name": "Khouribga",
+      "code": "A1P20",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "43a4ba95-62dd-4ddc-beb3-b0694a630ab0",
+      "name": "Laayoune",
+      "code": "A1P21",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:16"
+    },
+    {
+      "id": "292cd36e-b925-4bad-a3c2-9e095d6b2db1",
+      "name": "Taza",
+      "code": "A1P22",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "a1648f6f-63fd-438e-be35-36942afe0bd4",
+      "name": "Meknes",
+      "code": "A1P23",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "535e9cfc-044f-4d4f-886d-19ac0902df17",
+      "name": "KENITRA",
+      "code": "A1P24",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "9c305b42-abca-43e6-a91c-f70b7f2d3d08",
+      "name": "Khemisset",
+      "code": "A1P25",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "4b8bec30-c660-46fe-aaf6-5758eae7e84f",
+      "name": "GUERCIF",
+      "code": "A1P26",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "8aad0f87-1c71-4065-b63e-3c43cb578101",
+      "name": "SALE",
+      "code": "A1P27",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "da8960f9-e62f-4331-be12-a09f0387f781",
+      "name": "Marrakech",
+      "code": "A1P28",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "f1b9ea9d-1ad8-4e28-b2a7-3f13ecd614b1",
+      "name": "Dakhla",
+      "code": "A1P29",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:17"
+    },
+    {
+      "id": "fe8ebaf6-528a-4628-aa13-dc9afa829f5e",
+      "name": "Khemisset",
+      "code": "DR01",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "b351a85d-6425-4df0-8bf6-23d1dc1882ea",
+      "name": "Tetouan",
+      "code": "DR010",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "2f7fc780-ce22-407c-a29b-58b0b6b1084c",
+      "name": "Nador",
+      "code": "DR011",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "47e5af7b-c25d-460f-be96-a14f9c9204df",
+      "name": "Marrakech",
+      "code": "DR02",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "90f31693-aadf-42c2-9900-b04698322efb",
+      "name": "KENITRA",
+      "code": "DR03",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "b03fec54-9af2-4588-8d48-1e1a541a3286",
+      "name": "Casablanca",
+      "code": "DR04",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "a69dfae4-db50-42fc-b2eb-3fa3914be8fa",
+      "name": "Fes",
+      "code": "DR05",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "77bc2992-d48f-4a61-b9dc-bbb8f293fcb9",
+      "name": "IMZOUREN",
+      "code": "DR06",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "539d0015-5b5c-4db4-b299-f88036f49d5f",
+      "name": "SALE",
+      "code": "DR07",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "96cbe522-2d96-440d-801a-46b939d43a78",
+      "name": "Agadir",
+      "code": "DR08",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "0c7b8a55-5a4f-442f-bdf4-5f29820d6a7d",
+      "name": "Mohammedia",
+      "code": "DR09",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "8dc24130-fae8-4fb1-8168-169338e4b8d5",
+      "name": "Tanger",
+      "code": "DR12",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "d678acfe-7076-45f8-b2ff-2b5ff6e402f6",
+      "name": "Temara",
+      "code": "DR13",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "57c84a32-0b57-4527-b96b-5c95ce22c4fd",
+      "name": "OUED ZEM",
+      "code": "DR14",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "eb3373c2-1a84-4acf-b9f2-0a0f4dcb47b3",
+      "name": "Oujda",
+      "code": "DR15",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "44679ccb-7461-4615-ae7e-ccd61dbb47b6",
+      "name": "OUAZZANE",
+      "code": "DR16",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "c5695c37-6e23-49f5-8372-e20f1599c44d",
+      "name": "Meknes",
+      "code": "DR17",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "14a9c6ea-f94a-48f7-a2e9-2300d1eb3fc5",
+      "name": "Taza",
+      "code": "DR18",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "74ab2a0d-6912-458d-981f-172c41ee5907",
+      "name": "OUARZAZATE",
+      "code": "DR19",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "c6088d71-c0ad-41a7-a047-582075d29414",
+      "name": "EL JADIDA",
+      "code": "DR21",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    },
+    {
+      "id": "796b1ae4-be22-4cc2-902e-8e7b0e72bc13",
+      "name": "Rabat",
+      "code": "DR22",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:28"
+    }
+  ],
+  "professor_segments": [
+    {
+      "id": "5eeeed1e-07d1-4879-a8d0-0182e980d57d",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "segment_id": "a7c53881-0cf5-4ec6-8f14-e7fa7deb6dc9",
+      "created_at": "2025-10-19 15:11:28"
+    },
+    {
+      "id": "e73fe27d-050d-43c8-943f-ff71eb9cb9b4",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "segment_id": "6cf9c8d9-b083-4208-b64b-318b07d63061",
+      "created_at": "2025-10-19 15:11:34"
+    },
+    {
+      "id": "9dd7affb-0209-4f6b-b0f4-957065141ff4",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "created_at": "2025-10-19 15:22:49"
+    },
+    {
+      "id": "78ecfd0a-9e62-4f43-8395-911f4066860e",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "created_at": "2025-10-19 15:22:52"
+    }
+  ],
+  "professor_cities": [
+    {
+      "id": "a3303989-de4f-4e44-a574-446fd39a6348",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "city_id": "5e97fc12-a072-4ef4-905c-ef9228380afd",
+      "created_at": "2025-10-19 15:23:58"
+    },
+    {
+      "id": "049f7823-ce51-4862-be7b-e75b457e9bfe",
+      "professor_id": "22c5f559-a005-4ef9-940c-869d50c2b5fb",
+      "city_id": "96cbe522-2d96-440d-801a-46b939d43a78",
+      "created_at": "2025-10-19 15:23:58"
+    }
+  ],
+  "calculation_sheets": [
+    {
+      "id": "sheet_1760959415645",
+      "title": "Prolean Fiche de calcule",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0",
+      "city_id": null,
+      "template_data": "{\"name\":\"Prolean Fiche de calcule\",\"fields\":[{\"id\":\"field_42\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":300,\"w\":1000,\"h\":700},\"props\":{\"label\":\"Table des charges\"},\"children\":[]},{\"id\":\"field_6\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":120,\"w\":450,\"h\":160},\"props\":{\"label\":\"Donné système\"},\"children\":[]},{\"id\":\"field_1\",\"type\":\"label\",\"layout\":{\"x\":30,\"y\":160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Montant de la session\"}},{\"id\":\"field_2\",\"type\":\"label\",\"layout\":{\"x\":30,\"y\":220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Nombre d élèves  \"}},{\"id\":\"field_3\",\"type\":\"number\",\"layout\":{\"x\":240,\"y\":160,\"w\":200,\"h\":40},\"ref\":\"A1\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_4\",\"type\":\"number\",\"layout\":{\"x\":240,\"y\":220,\"w\":200,\"h\":40},\"ref\":\"A2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_9\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":0,\"w\":1000,\"h\":100},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_7\",\"type\":\"label\",\"layout\":{\"x\":60,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"Lien de la session\"}},{\"id\":\"field_8\",\"type\":\"text\",\"layout\":{\"x\":280,\"y\":40,\"w\":720,\"h\":40},\"ref\":\"TEXT_8\",\"props\":{\"label\":\"Texte\"}},{\"id\":\"field_10\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":340,\"w\":290,\"h\":40},\"props\":{\"label\":\"Type de charge\"}},{\"id\":\"field_11\",\"type\":\"label\",\"layout\":{\"x\":360,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prix (unitaire) \"}},{\"id\":\"field_12\",\"type\":\"label\",\"layout\":{\"x\":580,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Quantité\"}},{\"id\":\"field_13\",\"type\":\"label\",\"layout\":{\"x\":800,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale \"}},{\"id\":\"field_14\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":460,\"w\":290,\"h\":40},\"props\":{\"label\":\"CAF\"}},{\"id\":\"field_15\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":400,\"w\":290,\"h\":40},\"props\":{\"label\":\"Loyer centre\"}},{\"id\":\"field_16\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":520,\"w\":290,\"h\":40},\"props\":{\"label\":\"JCB\"}},{\"id\":\"field_17\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":580,\"w\":290,\"h\":40},\"props\":{\"label\":\"Manutou\"}},{\"id\":\"field_18\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":640,\"w\":290,\"h\":40},\"props\":{\"label\":\"Prime d assistante\"}},{\"id\":\"field_19\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":700,\"w\":290,\"h\":40},\"props\":{\"label\":\"Transport étudiant (sous dérogation )\"}},{\"id\":\"field_20\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":760,\"w\":290,\"h\":40},\"props\":{\"label\":\"Matériel (sous dérogation)\"}},{\"id\":\"field_21\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"A3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_22\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"A4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_23\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"A5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_24\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"A6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_25\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"A7\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_26\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"A8\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_27\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"A9\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_28\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"B3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_29\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"B4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_30\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"B5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_31\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"B6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_32\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"B7\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_33\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"B8\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_99\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":1060,\"w\":900,\"h\":520},\"props\":{\"label\":\"Charges administrative\"},\"children\":[],\"visibility\":{\"hidden\":true}},{\"id\":\"field_34\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"B9\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_43\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":820,\"w\":290,\"h\":40},\"props\":{\"label\":\"Remise\"}},{\"id\":\"field_44\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":880,\"w\":290,\"h\":40},\"props\":{\"label\":\"Abondant\"}},{\"id\":\"field_45\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"A10\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_46\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"A11\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_47\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"B10\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_65\",\"type\":\"frame\",\"layout\":{\"x\":1060,\"y\":300,\"w\":600,\"h\":700},\"props\":{\"label\":\"Commantaires\"},\"children\":[]},{\"id\":\"field_49\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"B11\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_51\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"C3\",\"props\":{\"label\":\"Formule\",\"expression\":\"A3*B3\",\"decimals\":2}},{\"id\":\"field_52\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"C4\",\"props\":{\"label\":\"Formule\",\"expression\":\"A4*B4\",\"decimals\":2}},{\"id\":\"field_53\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"C5\",\"props\":{\"label\":\"Formule\",\"expression\":\"A5*B5\",\"decimals\":2}},{\"id\":\"field_54\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"C6\",\"props\":{\"label\":\"Formule\",\"expression\":\"A6*B6\",\"decimals\":2}},{\"id\":\"field_55\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"C7\",\"props\":{\"label\":\"Formule\",\"expression\":\"A7*B7\",\"decimals\":2}},{\"id\":\"field_56\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"C8\",\"props\":{\"label\":\"Formule\",\"expression\":\"A8*B8\",\"decimals\":2}},{\"id\":\"field_57\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"C9\",\"props\":{\"label\":\"Formule\",\"expression\":\"A9*B9\",\"decimals\":2}},{\"id\":\"field_58\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"C10\",\"props\":{\"label\":\"Formule\",\"expression\":\"A10*B10\",\"decimals\":2}},{\"id\":\"field_59\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"C11\",\"props\":{\"label\":\"Formule\",\"expression\":\"A11*B11\",\"decimals\":2}},{\"id\":\"field_60\",\"type\":\"label\",\"layout\":{\"x\":580,\"y\":940,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale des charges\"}},{\"id\":\"field_61\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":940,\"w\":200,\"h\":40},\"ref\":\"C12\",\"props\":{\"label\":\"Formule\",\"expression\":\"C3+C4+C5+C6+C7+C8+C9+C10+C11\",\"decimals\":2}},{\"id\":\"field_63\",\"type\":\"frame\",\"layout\":{\"x\":540,\"y\":120,\"w\":480,\"h\":160},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_62\",\"type\":\"file\",\"layout\":{\"x\":550,\"y\":160,\"w\":190,\"h\":110},\"ref\":\"FILE_62\",\"props\":{\"label\":\"Pièce jointe\",\"accept\":\".pdf,.jpg,.jpeg,.png\",\"maxSize\":5}},{\"id\":\"field_66\",\"type\":\"textarea\",\"layout\":{\"x\":1080,\"y\":340,\"w\":560,\"h\":650},\"ref\":\"TEXTAREA_66\",\"props\":{\"label\":\"Commentaires\"}},{\"id\":\"field_67\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"charge administrative\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_68\",\"type\":\"label\",\"layout\":{\"x\":260,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prix unitaire\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_69\",\"type\":\"label\",\"layout\":{\"x\":480,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Quantité\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_70\",\"type\":\"label\",\"layout\":{\"x\":700,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_71\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Impression diplômes\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_72\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Publicité\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_73\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1280,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prime d assistante\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_74\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Animation page\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_75\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1400,\"w\":200,\"h\":40},\"props\":{\"label\":\"centre locale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_76\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1460,\"w\":200,\"h\":40},\"props\":{\"label\":\"centre locale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_77\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"D1\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":52},\"visibility\":{\"hidden\":true}},{\"id\":\"field_78\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"D2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1200},\"visibility\":{\"hidden\":true}},{\"id\":\"field_79\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"D3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":8},\"visibility\":{\"hidden\":true}},{\"id\":\"field_80\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"D4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":250},\"visibility\":{\"hidden\":true}},{\"id\":\"field_81\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"D5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":2000},\"visibility\":{\"hidden\":true}},{\"id\":\"field_82\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"D6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_84\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"E2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_86\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"E4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_87\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"E5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_88\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"E6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_89\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"F1\",\"props\":{\"label\":\"Formule\",\"expression\":\"D1*F0\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_107\",\"type\":\"frame\",\"layout\":{\"x\":1060,\"y\":0,\"w\":590,\"h\":280},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_90\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"F2\",\"props\":{\"label\":\"Formule\",\"expression\":\"D2*E2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_91\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"F3\",\"props\":{\"label\":\"Formule\",\"expression\":\"D3*F8\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_92\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"F4\",\"props\":{\"label\":\"Formule\",\"expression\":\"D4*E4\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_93\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"F5\",\"props\":{\"label\":\"Formule\",\"expression\":\"D5*E5\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_94\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"F6\",\"props\":{\"label\":\"Formule\",\"expression\":\"D6*E6\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_95\",\"type\":\"label\",\"layout\":{\"x\":480,\"y\":1520,\"w\":200,\"h\":40},\"props\":{\"label\":\"TOTALE\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_96\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1520,\"w\":200,\"h\":40},\"ref\":\"F7\",\"props\":{\"label\":\"Formule\",\"expression\":\"F1+F2+F3+F4+F5+F6\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_97\",\"type\":\"formula\",\"layout\":{\"x\":480,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"F0\",\"props\":{\"label\":\"Formule\",\"expression\":\"A2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_98\",\"type\":\"formula\",\"layout\":{\"x\":480,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"F8\",\"props\":{\"label\":\"Formule\",\"expression\":\"A2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_100\",\"type\":\"label\",\"layout\":{\"x\":1080,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"A VERSER\"}},{\"id\":\"field_101\",\"type\":\"formula\",\"layout\":{\"x\":1080,\"y\":100,\"w\":200,\"h\":40},\"ref\":\"F100\",\"props\":{\"label\":\"Formule\",\"expression\":\"A1-C12\",\"decimals\":2}},{\"id\":\"field_102\",\"type\":\"label\",\"layout\":{\"x\":1370,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"ECART\"}},{\"id\":\"field_103\",\"type\":\"formula\",\"layout\":{\"x\":1380,\"y\":100,\"w\":200,\"h\":40},\"ref\":\"FORMULA_101_COPY\",\"props\":{\"label\":\"Formule\",\"expression\":\"F101-F100\",\"decimals\":2}},{\"id\":\"field_105\",\"type\":\"number\",\"layout\":{\"x\":1080,\"y\":220,\"w\":200,\"h\":40},\"ref\":\"F101\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_133\",\"type\":\"frame\",\"layout\":{\"x\":960,\"y\":1060,\"w\":500,\"h\":760},\"props\":{\"label\":\"Calcule final \"},\"children\":[],\"visibility\":{\"hidden\":true}},{\"id\":\"field_106\",\"type\":\"label\",\"layout\":{\"x\":1080,\"y\":160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Montant versé\"}},{\"id\":\"field_108\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse et part\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_109\",\"type\":\"label\",\"layout\":{\"x\":1220,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"valeur \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_110\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse Théorique \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_111\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse physique \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_112\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1280,\"w\":200,\"h\":40},\"props\":{\"label\":\"Ecart\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_113\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1340,\"w\":200,\"h\":40},\"props\":{\"label\":\"caisse sans charges\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_114\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1400,\"w\":200,\"h\":40},\"props\":{\"label\":\"impôt\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_115\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1520,\"w\":200,\"h\":40},\"props\":{\"label\":\"cotisation minimale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_116\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"FO1\",\"props\":{\"label\":\"Formule\",\"expression\":\"A1-C12\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_117\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1580,\"w\":200,\"h\":40},\"props\":{\"label\":\"Reste net \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_119\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"FO3\",\"props\":{\"label\":\"Formule\",\"expression\":\"N66-FO1\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_120\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"FO4\",\"props\":{\"label\":\"Formule\",\"expression\":\"N66-F7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_121\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"FO5\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO4*2%\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_122\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"FO6\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO4-FO5\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_123\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1520,\"w\":200,\"h\":40},\"ref\":\"FO7\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO6*4%\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_124\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1640,\"w\":200,\"h\":40},\"props\":{\"label\":\"part centre\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_125\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1580,\"w\":200,\"h\":40},\"ref\":\"FO8\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO6-FO7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_126\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1640,\"w\":200,\"h\":40},\"ref\":\"FO9\",\"props\":{\"label\":\"Formule\",\"expression\":\"((FO8/3)*2)+F7+FO6+FO7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_127\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1700,\"w\":200,\"h\":40},\"props\":{\"label\":\"part prof\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_128\",\"type\":\"number\",\"layout\":{\"x\":1220,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"N66\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_129\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1460,\"w\":200,\"h\":40},\"props\":{\"label\":\"Apres impôt\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_130\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1700,\"w\":200,\"h\":40},\"ref\":\"FO10\",\"props\":{\"label\":\"Formule\",\"expression\":\"(FO8/3)-FO3\\n\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_131\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1760,\"w\":200,\"h\":40},\"props\":{\"label\":\"Ecart global \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_132\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1760,\"w\":200,\"h\":40},\"ref\":\"FO11\",\"props\":{\"label\":\"Formule\",\"expression\":\"(FO8/3)-FO3\\n\",\"decimals\":2},\"visibility\":{\"hidden\":true}}],\"version\":\"1.0.0\"}",
+      "status": "published",
+      "sheet_date": "2025-10-20T11:23:35.645Z",
+      "created_at": "2025-10-20T11:23:35.645Z",
+      "updated_at": "2025-10-21T10:56:41.071Z"
+    },
+    {
+      "id": "sheet_1760992431225",
+      "title": "Diray Fiche de calcule",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e",
+      "city_id": null,
+      "template_data": "{\"name\":\"Prolean Fiche de calcule\",\"fields\":[{\"id\":\"field_42\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":300,\"w\":1000,\"h\":700},\"props\":{\"label\":\"Table des charges\"},\"children\":[]},{\"id\":\"field_6\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":120,\"w\":450,\"h\":160},\"props\":{\"label\":\"Donné système\"},\"children\":[]},{\"id\":\"field_1\",\"type\":\"label\",\"layout\":{\"x\":30,\"y\":160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Montant de la session\"}},{\"id\":\"field_2\",\"type\":\"label\",\"layout\":{\"x\":30,\"y\":220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Nombre d élèves  \"}},{\"id\":\"field_3\",\"type\":\"number\",\"layout\":{\"x\":240,\"y\":160,\"w\":200,\"h\":40},\"ref\":\"A1\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_4\",\"type\":\"number\",\"layout\":{\"x\":240,\"y\":220,\"w\":200,\"h\":40},\"ref\":\"A2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_9\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":0,\"w\":1000,\"h\":100},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_7\",\"type\":\"label\",\"layout\":{\"x\":60,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"Lien de la session\"}},{\"id\":\"field_8\",\"type\":\"text\",\"layout\":{\"x\":280,\"y\":40,\"w\":720,\"h\":40},\"ref\":\"TEXT_8\",\"props\":{\"label\":\"Texte\"}},{\"id\":\"field_10\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":340,\"w\":290,\"h\":40},\"props\":{\"label\":\"Type de charge\"}},{\"id\":\"field_11\",\"type\":\"label\",\"layout\":{\"x\":360,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prix (unitaire) \"}},{\"id\":\"field_12\",\"type\":\"label\",\"layout\":{\"x\":580,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Quantité\"}},{\"id\":\"field_13\",\"type\":\"label\",\"layout\":{\"x\":800,\"y\":340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale \"}},{\"id\":\"field_14\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":460,\"w\":290,\"h\":40},\"props\":{\"label\":\"CAF\"}},{\"id\":\"field_15\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":400,\"w\":290,\"h\":40},\"props\":{\"label\":\"Loyer centre\"}},{\"id\":\"field_16\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":520,\"w\":290,\"h\":40},\"props\":{\"label\":\"JCB\"}},{\"id\":\"field_17\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":580,\"w\":290,\"h\":40},\"props\":{\"label\":\"Manutou\"}},{\"id\":\"field_18\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":640,\"w\":290,\"h\":40},\"props\":{\"label\":\"Prime d assistante\"}},{\"id\":\"field_19\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":700,\"w\":290,\"h\":40},\"props\":{\"label\":\"Transport étudiant (sous dérogation )\"}},{\"id\":\"field_20\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":760,\"w\":290,\"h\":40},\"props\":{\"label\":\"Matériel (sous dérogation)\"}},{\"id\":\"field_21\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"A3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_22\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"A4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_23\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"A5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_24\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"A6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_25\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"A7\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_26\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"A8\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_27\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"A9\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_28\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"B3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_29\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"B4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_30\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"B5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_31\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"B6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_32\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"B7\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_33\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"B8\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_99\",\"type\":\"frame\",\"layout\":{\"x\":20,\"y\":1060,\"w\":900,\"h\":520},\"props\":{\"label\":\"Charges administrative\"},\"children\":[],\"visibility\":{\"hidden\":true}},{\"id\":\"field_34\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"B9\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_43\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":820,\"w\":290,\"h\":40},\"props\":{\"label\":\"Remise\"}},{\"id\":\"field_44\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":880,\"w\":290,\"h\":40},\"props\":{\"label\":\"Abondant\"}},{\"id\":\"field_45\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"A10\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_46\",\"type\":\"number\",\"layout\":{\"x\":360,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"A11\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_47\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"B10\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_65\",\"type\":\"frame\",\"layout\":{\"x\":1060,\"y\":300,\"w\":600,\"h\":700},\"props\":{\"label\":\"Commantaires\"},\"children\":[]},{\"id\":\"field_49\",\"type\":\"number\",\"layout\":{\"x\":580,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"B11\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_51\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":400,\"w\":200,\"h\":40},\"ref\":\"C3\",\"props\":{\"label\":\"Formule\",\"expression\":\"A3*B3\",\"decimals\":2}},{\"id\":\"field_52\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":460,\"w\":200,\"h\":40},\"ref\":\"C4\",\"props\":{\"label\":\"Formule\",\"expression\":\"A4*B4\",\"decimals\":2}},{\"id\":\"field_53\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":520,\"w\":200,\"h\":40},\"ref\":\"C5\",\"props\":{\"label\":\"Formule\",\"expression\":\"A5*B5\",\"decimals\":2}},{\"id\":\"field_54\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":580,\"w\":200,\"h\":40},\"ref\":\"C6\",\"props\":{\"label\":\"Formule\",\"expression\":\"A6*B6\",\"decimals\":2}},{\"id\":\"field_55\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":640,\"w\":200,\"h\":40},\"ref\":\"C7\",\"props\":{\"label\":\"Formule\",\"expression\":\"A7*B7\",\"decimals\":2}},{\"id\":\"field_56\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":700,\"w\":200,\"h\":40},\"ref\":\"C8\",\"props\":{\"label\":\"Formule\",\"expression\":\"A8*B8\",\"decimals\":2}},{\"id\":\"field_57\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":760,\"w\":200,\"h\":40},\"ref\":\"C9\",\"props\":{\"label\":\"Formule\",\"expression\":\"A9*B9\",\"decimals\":2}},{\"id\":\"field_58\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":820,\"w\":200,\"h\":40},\"ref\":\"C10\",\"props\":{\"label\":\"Formule\",\"expression\":\"A10*B10\",\"decimals\":2}},{\"id\":\"field_59\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":880,\"w\":200,\"h\":40},\"ref\":\"C11\",\"props\":{\"label\":\"Formule\",\"expression\":\"A11*B11\",\"decimals\":2}},{\"id\":\"field_60\",\"type\":\"label\",\"layout\":{\"x\":580,\"y\":940,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale des charges\"}},{\"id\":\"field_61\",\"type\":\"formula\",\"layout\":{\"x\":800,\"y\":940,\"w\":200,\"h\":40},\"ref\":\"C12\",\"props\":{\"label\":\"Formule\",\"expression\":\"C3+C4+C5+C6+C7+C8+C9+C10+C11\",\"decimals\":2}},{\"id\":\"field_63\",\"type\":\"frame\",\"layout\":{\"x\":540,\"y\":120,\"w\":480,\"h\":160},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_62\",\"type\":\"file\",\"layout\":{\"x\":550,\"y\":160,\"w\":190,\"h\":110},\"ref\":\"FILE_62\",\"props\":{\"label\":\"Pièce jointe\",\"accept\":\".pdf,.jpg,.jpeg,.png\",\"maxSize\":5}},{\"id\":\"field_66\",\"type\":\"textarea\",\"layout\":{\"x\":1080,\"y\":340,\"w\":560,\"h\":650},\"ref\":\"TEXTAREA_66\",\"props\":{\"label\":\"Commentaires\"}},{\"id\":\"field_67\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"charge administrative\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_68\",\"type\":\"label\",\"layout\":{\"x\":260,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prix unitaire\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_69\",\"type\":\"label\",\"layout\":{\"x\":480,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Quantité\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_70\",\"type\":\"label\",\"layout\":{\"x\":700,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Totale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_71\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Impression diplômes\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_72\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Publicité\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_73\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1280,\"w\":200,\"h\":40},\"props\":{\"label\":\"Prime d assistante\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_74\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1340,\"w\":200,\"h\":40},\"props\":{\"label\":\"Animation page\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_75\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1400,\"w\":200,\"h\":40},\"props\":{\"label\":\"centre locale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_76\",\"type\":\"label\",\"layout\":{\"x\":40,\"y\":1460,\"w\":200,\"h\":40},\"props\":{\"label\":\"centre locale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_77\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"D1\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":52},\"visibility\":{\"hidden\":true}},{\"id\":\"field_78\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"D2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1200},\"visibility\":{\"hidden\":true}},{\"id\":\"field_79\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"D3\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":8},\"visibility\":{\"hidden\":true}},{\"id\":\"field_80\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"D4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":250},\"visibility\":{\"hidden\":true}},{\"id\":\"field_81\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"D5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":2000},\"visibility\":{\"hidden\":true}},{\"id\":\"field_82\",\"type\":\"number\",\"layout\":{\"x\":260,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"D6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_84\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"E2\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_86\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"E4\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_87\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"E5\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":1},\"visibility\":{\"hidden\":true}},{\"id\":\"field_88\",\"type\":\"number\",\"layout\":{\"x\":480,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"E6\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_89\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"F1\",\"props\":{\"label\":\"Formule\",\"expression\":\"D1*F0\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_107\",\"type\":\"frame\",\"layout\":{\"x\":1060,\"y\":0,\"w\":590,\"h\":280},\"props\":{\"label\":\"Cadre\"},\"children\":[]},{\"id\":\"field_90\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"F2\",\"props\":{\"label\":\"Formule\",\"expression\":\"D2*E2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_91\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"F3\",\"props\":{\"label\":\"Formule\",\"expression\":\"D3*F8\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_92\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"F4\",\"props\":{\"label\":\"Formule\",\"expression\":\"D4*E4\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_93\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"F5\",\"props\":{\"label\":\"Formule\",\"expression\":\"D5*E5\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_94\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"F6\",\"props\":{\"label\":\"Formule\",\"expression\":\"D6*E6\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_95\",\"type\":\"label\",\"layout\":{\"x\":480,\"y\":1520,\"w\":200,\"h\":40},\"props\":{\"label\":\"TOTALE\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_96\",\"type\":\"formula\",\"layout\":{\"x\":700,\"y\":1520,\"w\":200,\"h\":40},\"ref\":\"F7\",\"props\":{\"label\":\"Formule\",\"expression\":\"F1+F2+F3+F4+F5+F6\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_97\",\"type\":\"formula\",\"layout\":{\"x\":480,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"F0\",\"props\":{\"label\":\"Formule\",\"expression\":\"A2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_98\",\"type\":\"formula\",\"layout\":{\"x\":480,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"F8\",\"props\":{\"label\":\"Formule\",\"expression\":\"A2\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_100\",\"type\":\"label\",\"layout\":{\"x\":1080,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"A VERSER\"}},{\"id\":\"field_101\",\"type\":\"formula\",\"layout\":{\"x\":1080,\"y\":100,\"w\":200,\"h\":40},\"ref\":\"F100\",\"props\":{\"label\":\"Formule\",\"expression\":\"A1-C12\",\"decimals\":2}},{\"id\":\"field_102\",\"type\":\"label\",\"layout\":{\"x\":1370,\"y\":40,\"w\":200,\"h\":40},\"props\":{\"label\":\"ECART\"}},{\"id\":\"field_103\",\"type\":\"formula\",\"layout\":{\"x\":1380,\"y\":100,\"w\":200,\"h\":40},\"ref\":\"FORMULA_101_COPY\",\"props\":{\"label\":\"Formule\",\"expression\":\"F101-F100\",\"decimals\":2}},{\"id\":\"field_105\",\"type\":\"number\",\"layout\":{\"x\":1080,\"y\":220,\"w\":200,\"h\":40},\"ref\":\"F101\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0}},{\"id\":\"field_133\",\"type\":\"frame\",\"layout\":{\"x\":960,\"y\":1060,\"w\":500,\"h\":760},\"props\":{\"label\":\"Calcule final \"},\"children\":[],\"visibility\":{\"hidden\":true}},{\"id\":\"field_106\",\"type\":\"label\",\"layout\":{\"x\":1080,\"y\":160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Montant versé\"}},{\"id\":\"field_108\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse et part\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_109\",\"type\":\"label\",\"layout\":{\"x\":1220,\"y\":1100,\"w\":200,\"h\":40},\"props\":{\"label\":\"valeur \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_110\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1160,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse Théorique \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_111\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1220,\"w\":200,\"h\":40},\"props\":{\"label\":\"Caisse physique \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_112\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1280,\"w\":200,\"h\":40},\"props\":{\"label\":\"Ecart\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_113\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1340,\"w\":200,\"h\":40},\"props\":{\"label\":\"caisse sans charges\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_114\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1400,\"w\":200,\"h\":40},\"props\":{\"label\":\"impôt\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_115\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1520,\"w\":200,\"h\":40},\"props\":{\"label\":\"cotisation minimale\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_116\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1160,\"w\":200,\"h\":40},\"ref\":\"FO1\",\"props\":{\"label\":\"Formule\",\"expression\":\"A1-C12\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_117\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1580,\"w\":200,\"h\":40},\"props\":{\"label\":\"Reste net \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_119\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1280,\"w\":200,\"h\":40},\"ref\":\"FO3\",\"props\":{\"label\":\"Formule\",\"expression\":\"N66-FO1\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_120\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1340,\"w\":200,\"h\":40},\"ref\":\"FO4\",\"props\":{\"label\":\"Formule\",\"expression\":\"N66-F7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_121\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1400,\"w\":200,\"h\":40},\"ref\":\"FO5\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO4*2%\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_122\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1460,\"w\":200,\"h\":40},\"ref\":\"FO6\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO4-FO5\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_123\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1520,\"w\":200,\"h\":40},\"ref\":\"FO7\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO6*4%\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_124\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1640,\"w\":200,\"h\":40},\"props\":{\"label\":\"part centre\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_125\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1580,\"w\":200,\"h\":40},\"ref\":\"FO8\",\"props\":{\"label\":\"Formule\",\"expression\":\"FO6-FO7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_126\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1640,\"w\":200,\"h\":40},\"ref\":\"FO9\",\"props\":{\"label\":\"Formule\",\"expression\":\"((FO8/3)*2)+F7+FO6+FO7\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_127\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1700,\"w\":200,\"h\":40},\"props\":{\"label\":\"part prof\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_128\",\"type\":\"number\",\"layout\":{\"x\":1220,\"y\":1220,\"w\":200,\"h\":40},\"ref\":\"N66\",\"props\":{\"label\":\"Nombre\",\"decimals\":2,\"default\":0},\"visibility\":{\"hidden\":true}},{\"id\":\"field_129\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1460,\"w\":200,\"h\":40},\"props\":{\"label\":\"Apres impôt\"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_130\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1700,\"w\":200,\"h\":40},\"ref\":\"FO10\",\"props\":{\"label\":\"Formule\",\"expression\":\"(FO8/3)-FO3\\n\",\"decimals\":2},\"visibility\":{\"hidden\":true}},{\"id\":\"field_131\",\"type\":\"label\",\"layout\":{\"x\":1000,\"y\":1760,\"w\":200,\"h\":40},\"props\":{\"label\":\"Ecart global \"},\"visibility\":{\"hidden\":true}},{\"id\":\"field_132\",\"type\":\"formula\",\"layout\":{\"x\":1220,\"y\":1760,\"w\":200,\"h\":40},\"ref\":\"FO11\",\"props\":{\"label\":\"Formule\",\"expression\":\"(FO8/3)-FO3\\n\",\"decimals\":2},\"visibility\":{\"hidden\":true}}],\"version\":\"1.0.0\"}",
+      "status": "published",
+      "sheet_date": "2025-10-20T20:33:51.226Z",
+      "created_at": "2025-10-20T20:33:51.226Z",
+      "updated_at": "2025-10-20T20:35:46.728Z"
+    }
+  ],
+  "calculation_sheet_segments": [
+    {
+      "sheet_id": "sheet_1760959415645",
+      "segment_id": "e9ad8bf2-88dd-47cd-9c68-98bb3a45aaa0"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "segment_id": "b3b3893f-641f-472a-9f80-7956a02c574e"
+    }
+  ],
+  "calculation_sheet_cities": [
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "5e97fc12-a072-4ef4-905c-ef9228380afd"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "1eff25f1-da4d-43ef-ace6-ddc911e4f669"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "8c348ada-dd52-4581-9cf2-1eef6cf659c0"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "292cd36e-b925-4bad-a3c2-9e095d6b2db1"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "657b4a95-f8cc-4879-a552-a0c667c4cdf5"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "0cd77f84-4004-493f-adc2-82fefc6ced8e"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "8aad0f87-1c71-4065-b63e-3c43cb578101"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "11f17ee0-da76-4b35-a30e-a4d274c9a02e"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "7c0f4c39-82eb-45d3-8392-7dfb8af37515"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "a1648f6f-63fd-438e-be35-36942afe0bd4"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "4865fda2-9902-48ce-8f7f-f2d7658a1b66"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "c88695a3-620a-4fa7-8597-8cd19c8376bf"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "da8960f9-e62f-4331-be12-a09f0387f781"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "43a4ba95-62dd-4ddc-beb3-b0694a630ab0"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "5b938e23-01b7-4ff7-ba14-191b21a89849"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "8ed4d5c8-75af-4da8-8c93-87d3b1551229"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "9c305b42-abca-43e6-a91c-f70b7f2d3d08"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "4b8bec30-c660-46fe-aaf6-5758eae7e84f"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "8d649ba7-a21a-493e-8819-f304a1e3cca0"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "535e9cfc-044f-4d4f-886d-19ac0902df17"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "c8f4247c-0b83-435b-8200-e06b2c505198"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "2643cf46-85b3-4ad7-9c8c-c400badd63e0"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "74c2aa27-aa5b-4be0-b2bd-9be040df1839"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "12e0f69e-ae6c-4161-bb4f-6cb82534f264"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "f1b9ea9d-1ad8-4e28-b2a7-3f13ecd614b1"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "deed4f0f-6bc6-4005-a35e-7a13dd54c0b5"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "6c73e4ab-b42c-4833-afd4-aafc880a3a20"
+    },
+    {
+      "sheet_id": "sheet_1760959415645",
+      "city_id": "a4d8c7f4-3be2-435a-a627-90c840c7f913"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "96cbe522-2d96-440d-801a-46b939d43a78"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "b03fec54-9af2-4588-8d48-1e1a541a3286"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "c6088d71-c0ad-41a7-a047-582075d29414"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "a69dfae4-db50-42fc-b2eb-3fa3914be8fa"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "77bc2992-d48f-4a61-b9dc-bbb8f293fcb9"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "90f31693-aadf-42c2-9900-b04698322efb"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "fe8ebaf6-528a-4628-aa13-dc9afa829f5e"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "47e5af7b-c25d-460f-be96-a14f9c9204df"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "c5695c37-6e23-49f5-8372-e20f1599c44d"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "0c7b8a55-5a4f-442f-bdf4-5f29820d6a7d"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "2f7fc780-ce22-407c-a29b-58b0b6b1084c"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "74ab2a0d-6912-458d-981f-172c41ee5907"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "44679ccb-7461-4615-ae7e-ccd61dbb47b6"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "57c84a32-0b57-4527-b96b-5c95ce22c4fd"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "eb3373c2-1a84-4acf-b9f2-0a0f4dcb47b3"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "796b1ae4-be22-4cc2-902e-8e7b0e72bc13"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "539d0015-5b5c-4db4-b299-f88036f49d5f"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "8dc24130-fae8-4fb1-8168-169338e4b8d5"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "14a9c6ea-f94a-48f7-a2e9-2300d1eb3fc5"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "d678acfe-7076-45f8-b2ff-2b5ff6e402f6"
+    },
+    {
+      "sheet_id": "sheet_1760992431225",
+      "city_id": "b351a85d-6425-4df0-8bf6-23d1dc1882ea"
+    }
+  ],
+  "professor_declarations": []
+}

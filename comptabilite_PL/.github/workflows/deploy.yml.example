@@ -1,0 +1,81 @@
+# Exemple de workflow de déploiement
+# Renommer ce fichier en deploy.yml et configurer les secrets pour l'activer
+
+name: Déploiement Production
+
+on:
+  push:
+    branches: [ main ]
+    # Décommentez pour activer le déploiement automatique
+    # tags:
+    #   - 'v*'
+
+jobs:
+  deploy:
+    name: Déployer sur Railway
+    runs-on: ubuntu-latest
+    # Décommentez pour activer
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Exécuter les tests avant le déploiement
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Run tests
+        working-directory: ./server
+        run: npm test
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET_TEST }}
+          NODE_ENV: test
+
+      # Ne déployer que si les tests passent
+      - name: Deploy to Railway
+        if: success()
+        run: |
+          echo "Déploiement vers Railway..."
+          # Configurer Railway CLI ou utiliser les webhooks de déploiement
+          # Exemple: curl -X POST ${{ secrets.RAILWAY_WEBHOOK_URL }}
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "✅ Déploiement réussi sur Railway"
+          # Optionnel: envoyer une notification Slack/Discord/Email
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "❌ Déploiement échoué"
+          # Optionnel: envoyer une alerte
+
+  post-deploy-checks:
+    name: Vérifications Post-Déploiement
+    runs-on: ubuntu-latest
+    needs: deploy
+    # if: needs.deploy.result == 'success'
+
+    steps:
+      - name: Health check
+        run: |
+          echo "Vérification de l'endpoint de santé..."
+          # curl -f https://your-app.railway.app/api/health || exit 1
+
+      - name: Smoke tests
+        run: |
+          echo "Exécution des smoke tests..."
+          # Tests basiques pour vérifier que l'application fonctionne
+
+# Configuration requise dans GitHub Secrets:
+# - JWT_SECRET_TEST: Secret JWT pour les tests
+# - RAILWAY_WEBHOOK_URL: URL de déploiement Railway (optionnel)
+# - DATABASE_URL: URL de la base de données (gérée par Railway)

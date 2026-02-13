@@ -1,0 +1,81 @@
+INSTRUCTIONS POUR CLAUDE NAVIGATEUR - CRÉATION DE TEMPLATES CERTIFICATS PROLEAN
+================================================================================
+
+URL de l'application: https://systeme-calcul-production.up.railway.app
+Page des templates: https://systeme-calcul-production.up.railway.app/admin/certificate-templates
+
+BASE URL pour les images: https://systeme-calcul-production.up.railway.app/templates-prolean/
+
+================================================================================
+LISTE DES 18 TEMPLATES À CRÉER
+================================================================================
+
+Pour chaque template:
+1. Aller sur la page des templates de certificats
+2. Cliquer sur le bouton "Nouveau template" (ou +)
+3. Saisir le NOM DU TEMPLATE
+4. Dans le panneau de droite, section "Arrière-plan", cliquer sur l'onglet "URL"
+5. Coller l'URL DE L'IMAGE dans le champ
+6. Cliquer sur "Appliquer l'URL"
+7. Sauvegarder le template
+8. Répéter pour le suivant
+
+================================================================================
+
+1. NOM: certificat PROLEAN CACES JCB
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-jcb.jpg
+
+2. NOM: certificat PROLEAN CACES SONDA
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-sonda.jpg
+
+3. NOM: certificat PROLEAN CAF PACK REDUIT
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caf-pack-reduit.jpg
+
+4. NOM: certificat PROLEAN REACH STACKER
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/reach-stacker.jpg
+
+5. NOM: certificat PROLEAN CACES CAF
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-caf.jpg
+
+6. NOM: certificat PROLEAN CACES GRUE MOBILE
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-grue-mobile.jpg
+
+7. NOM: certificat PROLEAN CACES MANI
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-mani.jpg
+
+8. NOM: certificat PROLEAN CACES NIVELEUSE
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-niveleuse.jpg
+
+9. NOM: certificat PROLEAN CACES TRACTEUR
+   URL: https://systeme-calcul-production.up.railway.app/templates-prolean/caces-tracteur.jpg
+
+10. NOM: certificat PROLEAN FINISSEUR
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/finisseur.jpg
+
+11. NOM: certificat PROLEAN FOREUSE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/foreuse.jpg
+
+12. NOM: certificat PROLEAN FRAISEUSE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/fraiseuse.jpg
+
+13. NOM: certificat PROLEAN PORTE CHAR
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/porte-char.jpg
+
+14. NOM: certificat PROLEAN BETONNIERE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/betonniere.jpg
+
+15. NOM: certificat PROLEAN GRUE AUXILIAIRE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/grue-auxiliaire.jpg
+
+16. NOM: certificat PROLEAN GRUE FIXE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/grue-fixe.jpg
+
+17. NOM: certificat PROLEAN NACELLE
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/nacelle.jpg
+
+18. NOM: certificat PROLEAN PELLE SUR RAIL
+    URL: https://systeme-calcul-production.up.railway.app/templates-prolean/pelle-sur-rail.jpg
+
+================================================================================
+FIN DE LA LISTE
+================================================================================
