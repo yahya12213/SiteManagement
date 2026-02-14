@@ -127,6 +127,42 @@ function hasCol(columns, column) {
     return columns.has(column);
 }
 
+function isUuidLike(value) {
+    return typeof value === 'string'
+        && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.trim());
+}
+
+function normalizePhoneValue(raw) {
+    if (!raw) return '';
+    return String(raw).replace(/[^\d+]/g, '').trim();
+}
+
+function splitFullName(fullName) {
+    const normalized = String(fullName || '').trim().replace(/\s+/g, ' ');
+    if (!normalized) {
+        return { nom: '', prenom: '' };
+    }
+    const parts = normalized.split(' ');
+    if (parts.length === 1) {
+        return { nom: parts[0], prenom: parts[0] };
+    }
+    return {
+        prenom: parts[0],
+        nom: parts.slice(1).join(' ')
+    };
+}
+
+function buildCinFallback(cinOrPassport, email, phoneNumber) {
+    const provided = String(cinOrPassport || '').trim().toUpperCase();
+    if (provided) {
+        return provided;
+    }
+    const emailPart = String(email || '').split('@')[0].replace(/[^a-z0-9]/gi, '').toUpperCase().slice(0, 3) || 'STD';
+    const phonePart = normalizePhoneValue(phoneNumber).replace(/\D/g, '').slice(-3) || '000';
+    const timePart = Date.now().toString().slice(-6);
+    return `${emailPart}${timePart}${phonePart}`.slice(0, 20);
+}
+
 async function getProfileColumnsMeta() {
     const result = await pool.query(`
       SELECT column_name, data_type, udt_name, column_default, is_nullable
@@ -135,6 +171,20 @@ async function getProfileColumnsMeta() {
         AND table_name = 'profiles'
     `);
 
+    const meta = new Map();
+    for (const row of result.rows) {
+        meta.set(row.column_name, row);
+    }
+    return meta;
+}
+
+async function getTableColumnsMeta(tableName) {
+    const result = await pool.query(
+        `SELECT column_name, data_type, udt_name, column_default, is_nullable
+         FROM information_schema.columns
+         WHERE table_schema = 'public' AND table_name = $1`,
+        [tableName]
+    );
     const meta = new Map();
     for (const row of result.rows) {
         meta.set(row.column_name, row);
@@ -212,7 +262,7 @@ async function resolveStudentRole(allowedRoleNames = null) {
 }
 
 function normalizeCityId(rawCityId, profileMeta) {
-    if (!rawCityId || !profileMeta.has('city_id')) {
+    if (!rawCityId || !profileMeta || !profileMeta.has('city_id')) {
         return null;
     }
 
@@ -230,6 +280,66 @@ function normalizeCityId(rawCityId, profileMeta) {
     }
 
     return value;
+}
+
+function normalizeColumnId(rawValue, tableMeta, columnName) {
+    if (!rawValue || !tableMeta || !tableMeta.has(columnName)) return null;
+    const value = String(rawValue).trim();
+    if (!value || value.startsWith('fallback-')) {
+        return null;
+    }
+    const colMeta = tableMeta.get(columnName);
+    const isNumeric = ['integer', 'bigint', 'smallint'].includes(colMeta.data_type)
+        || ['int4', 'int8', 'int2'].includes(colMeta.udt_name);
+    if (isNumeric) {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isNaN(parsed) ? null : parsed;
+    }
+    return value;
+}
+
+async function resolveStudentByIdentity({ email, phone, fullName, cinOrPassport }) {
+    const studentMeta = await getTableColumnsMeta('students');
+    if (studentMeta.size === 0) {
+        return null;
+    }
+
+    const where = [];
+    const params = [];
+
+    if (email && studentMeta.has('email')) {
+        params.push(String(email).trim().toLowerCase());
+        where.push(`LOWER(email) = $${params.length}`);
+    }
+
+    const normalizedPhone = normalizePhoneValue(phone);
+    if (normalizedPhone && studentMeta.has('phone')) {
+        params.push(normalizedPhone);
+        where.push(`regexp_replace(COALESCE(phone, ''), '[^0-9+]', '', 'g') = $${params.length}`);
+    }
+
+    if (cinOrPassport && studentMeta.has('cin')) {
+        params.push(String(cinOrPassport).trim().toUpperCase());
+        where.push(`UPPER(cin) = $${params.length}`);
+    }
+
+    const parts = splitFullName(fullName);
+    if (parts.nom && parts.prenom && studentMeta.has('nom') && studentMeta.has('prenom')) {
+        params.push(parts.nom.toLowerCase());
+        params.push(parts.prenom.toLowerCase());
+        where.push(`LOWER(nom) = $${params.length - 1} AND LOWER(prenom) = $${params.length}`);
+    }
+
+    if (where.length === 0) {
+        return null;
+    }
+
+    const createdAtExpr = studentMeta.has('created_at') ? 'created_at' : 'NOW()';
+    const result = await pool.query(
+        `SELECT * FROM students WHERE ${where.join(' OR ')} ORDER BY ${createdAtExpr} DESC LIMIT 1`,
+        params
+    );
+    return result.rows[0] || null;
 }
 
 /**
@@ -375,6 +485,7 @@ router.get('/formations/:slug', publicReadLimiter, async (req, res) => {
  * Public endpoint for Prolean signup. Creates a STUDENT profile in management DB.
  */
 router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, async (req, res) => {
+    const client = await pool.connect();
     try {
         const {
             full_name,
@@ -385,16 +496,20 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
             city_id
         } = req.body || {};
 
-        if (!full_name || !email || !password) {
-            return res.status(400).json({ error: 'full_name, email and password are required' });
+        if (!full_name || !email || !password || !phone_number) {
+            return res.status(400).json({ error: 'full_name, email, phone_number and password are required' });
         }
 
         const username = String(email).trim().toLowerCase();
+        const normalizedPhone = normalizePhoneValue(phone_number);
         const profileMeta = await getProfileColumnsMeta();
+        const studentMeta = await getTableColumnsMeta('students');
         const allowedProfileRoles = await getAllowedProfileRoles();
         if (profileMeta.size === 0) {
             return res.status(500).json({ error: 'profiles table metadata not found' });
         }
+
+        await client.query('BEGIN');
 
         const dupParams = [username];
         let duplicateSql = 'SELECT 1 FROM profiles WHERE username = $1';
@@ -402,9 +517,33 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
             dupParams.push(username);
             duplicateSql += ` OR email = $${dupParams.length}`;
         }
-        const duplicate = await pool.query(duplicateSql, dupParams);
+        const duplicate = await client.query(duplicateSql, dupParams);
         if (duplicate.rows.length > 0) {
+            await client.query('ROLLBACK');
             return res.status(409).json({ error: 'Email already used' });
+        }
+
+        if (studentMeta.size > 0) {
+            const studentDupWhere = [];
+            const studentDupParams = [];
+            if (studentMeta.has('email')) {
+                studentDupParams.push(username);
+                studentDupWhere.push(`LOWER(email) = $${studentDupParams.length}`);
+            }
+            if (studentMeta.has('phone')) {
+                studentDupParams.push(normalizedPhone);
+                studentDupWhere.push(`regexp_replace(COALESCE(phone, ''), '[^0-9+]', '', 'g') = $${studentDupParams.length}`);
+            }
+            if (studentDupWhere.length > 0) {
+                const existingStudent = await client.query(
+                    `SELECT id FROM students WHERE ${studentDupWhere.join(' OR ')} LIMIT 1`,
+                    studentDupParams
+                );
+                if (existingStudent.rows.length > 0) {
+                    await client.query('ROLLBACK');
+                    return res.status(409).json({ error: 'Student already exists with this email or phone number' });
+                }
+            }
         }
 
         const insertCols = [];
@@ -424,7 +563,7 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
             if (isUuid || isStringId) {
                 generatedId = randomUUID();
             } else if (isNumericId) {
-                const maxIdResult = await pool.query('SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM profiles');
+                const maxIdResult = await client.query('SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM profiles');
                 generatedId = maxIdResult.rows[0]?.next_id;
             } else {
                 generatedId = randomUUID();
@@ -481,9 +620,14 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
         }
 
         if (profileMeta.has('role_id') && selectedRole?.id) {
-            insertCols.push('role_id');
-            insertVals.push(selectedRole.id);
-            placeholders.push(`$${paramIndex++}`);
+            const roleIdMeta = profileMeta.get('role_id');
+            const roleIdIsUuid = roleIdMeta
+                && (roleIdMeta.data_type === 'uuid' || roleIdMeta.udt_name === 'uuid');
+            if (!roleIdIsUuid || isUuidLike(String(selectedRole.id))) {
+                insertCols.push('role_id');
+                insertVals.push(selectedRole.id);
+                placeholders.push(`$${paramIndex++}`);
+            }
         }
 
         if (profileMeta.has('status')) {
@@ -538,12 +682,101 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
           VALUES (${placeholders.join(', ')})
           RETURNING id, username, full_name, role, created_at
         `;
-        const result = await pool.query(query, insertVals);
+        const result = await client.query(query, insertVals);
+
+        let student = null;
+        if (studentMeta.size > 0) {
+            const { nom, prenom } = splitFullName(full_name);
+            const cinValue = buildCinFallback(cin_or_passport, username, normalizedPhone);
+
+            const studentInsertCols = [];
+            const studentInsertVals = [];
+            const studentPlaceholders = [];
+            let idx = 1;
+            const pushStudent = (col, val) => {
+                studentInsertCols.push(col);
+                studentInsertVals.push(val);
+                studentPlaceholders.push(`$${idx++}`);
+            };
+
+            const studentIdMeta = studentMeta.get('id');
+            if (studentIdMeta && !studentIdMeta.column_default) {
+                const isNumericId = ['integer', 'bigint', 'smallint'].includes(studentIdMeta.data_type)
+                    || ['int4', 'int8', 'int2'].includes(studentIdMeta.udt_name);
+                if (isNumericId) {
+                    const maxId = await client.query('SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM students');
+                    pushStudent('id', maxId.rows[0]?.next_id);
+                } else {
+                    pushStudent('id', randomUUID());
+                }
+            }
+
+            const defaultValues = new Map([
+                ['nom', nom || String(full_name).trim()],
+                ['prenom', prenom || nom || String(full_name).trim()],
+                ['cin', cinValue],
+                ['email', username],
+                ['phone', normalizedPhone || String(phone_number).trim()],
+                ['whatsapp', normalizedPhone || String(phone_number).trim()],
+                ['date_naissance', '2000-01-01'],
+                ['lieu_naissance', 'Non renseigne'],
+                ['adresse', 'Non renseignee'],
+                ['statut_compte', 'inactif'],
+                ['status', 'valide'],
+                ['city_id', normalizeColumnId(city_id, studentMeta, 'city_id')],
+                ['profile_image_url', '']
+            ]);
+
+            for (const [col, meta] of studentMeta.entries()) {
+                if (col === 'id') continue;
+                const hasDefault = !!meta.column_default;
+                const isRequired = meta.is_nullable === 'NO' && !hasDefault;
+                if (!isRequired && !defaultValues.has(col)) continue;
+
+                let value = defaultValues.get(col);
+                if (value === undefined || value === null || value === '') {
+                    if (isRequired) {
+                        if (col === 'status') value = 'valide';
+                        else if (col === 'statut_compte') value = 'inactif';
+                        else if (col === 'phone') value = normalizedPhone || '0000000000';
+                        else if (col === 'cin') value = cinValue;
+                        else if (col === 'nom') value = nom || String(full_name).trim();
+                        else if (col === 'prenom') value = prenom || nom || String(full_name).trim();
+                        else if (col === 'date_naissance') value = '2000-01-01';
+                        else if (col === 'lieu_naissance') value = 'Non renseigne';
+                        else if (col === 'adresse') value = 'Non renseignee';
+                        else if (col === 'profile_image_url') value = '';
+                    } else {
+                        continue;
+                    }
+                }
+
+                pushStudent(col, value);
+            }
+
+            if (studentInsertCols.length > 0) {
+                const studentInsert = await client.query(
+                    `INSERT INTO students (${studentInsertCols.join(', ')})
+                     VALUES (${studentPlaceholders.join(', ')})
+                     RETURNING id, nom, prenom, email, phone, statut_compte`,
+                    studentInsertVals
+                );
+                student = studentInsert.rows[0] || null;
+            }
+        }
+
+        await client.query('COMMIT');
         return res.status(201).json({
             message: 'Student registered successfully',
-            profile: result.rows[0]
+            profile: result.rows[0],
+            student
         });
     } catch (error) {
+        try {
+            await client.query('ROLLBACK');
+        } catch {
+            // noop
+        }
         console.error('Error in public student-register:', error);
         if (error.code === '23505') {
             return res.status(409).json({ error: 'Email already used' });
@@ -558,6 +791,8 @@ router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, 
             error: 'Error creating student account',
             details: error.detail || error.message
         });
+    } finally {
+        client.release();
     }
 });
 
@@ -648,6 +883,18 @@ router.post('/student-login', enforceExternalOrigin, sensitivePublicLimiter, asy
         }
 
         const token = signExternalStudentToken(profile);
+        const linkedStudent = await resolveStudentByIdentity({
+            email: profile.email || profile.username,
+            phone: profile.phone_number || profile.phone || '',
+            fullName: profile.full_name || '',
+            cinOrPassport: profile.cin_or_passport || ''
+        });
+        if (linkedStudent) {
+            const studentStatus = String(linkedStudent.statut_compte || '').toLowerCase();
+            if (studentStatus && ['inactif', 'suspendu'].includes(studentStatus)) {
+                return res.status(403).json({ error: 'Account pending activation', status: 'pending' });
+            }
+        }
         return res.json({
             success: true,
             token,
@@ -656,7 +903,7 @@ router.post('/student-login', enforceExternalOrigin, sensitivePublicLimiter, asy
                 id: profile.id,
                 email: profile.email || profile.username,
                 full_name: profile.full_name || '',
-                status: statusValue || 'active'
+                status: statusValue || (linkedStudent ? String(linkedStudent.statut_compte || 'active') : 'active')
             }
         });
     } catch (error) {
@@ -702,7 +949,8 @@ router.get('/student/profile', requireExternalStudentToken, async (req, res) => 
 router.get('/student/dashboard', requireExternalStudentToken, async (req, res) => {
     try {
         const profileId = req.externalStudent.profile_id;
-        const studentTablesExist = await tableExists('students');
+        const studentMeta = await getTableColumnsMeta('students');
+        const studentTablesExist = studentMeta.size > 0;
         const sessionTablesExist = await tableExists('session_etudiants') && await tableExists('sessions_formation');
 
         let profile = {
@@ -711,23 +959,29 @@ router.get('/student/dashboard', requireExternalStudentToken, async (req, res) =
             email: req.externalStudent.username || ''
         };
         const profileResult = await pool.query(
-            'SELECT id, username, full_name, role, created_at FROM profiles WHERE id = $1',
+            'SELECT * FROM profiles WHERE id = $1',
             [profileId]
         );
+        let profileRow = null;
         if (profileResult.rows.length) {
             const p = profileResult.rows[0];
+            profileRow = p;
             profile = { id: p.id, full_name: p.full_name || '', email: p.username || '' };
         }
 
+        const linkedStudent = studentTablesExist
+            ? await resolveStudentByIdentity({
+                email: profileRow?.email || profileRow?.username || req.externalStudent.username,
+                phone: profileRow?.phone_number || profileRow?.phone || '',
+                fullName: profileRow?.full_name || req.externalStudent.full_name || '',
+                cinOrPassport: profileRow?.cin_or_passport || ''
+            })
+            : null;
+
         let formations = [];
         let sessions = [];
-        if (studentTablesExist && sessionTablesExist) {
-            const studentByCin = await pool.query(
-                'SELECT id FROM students WHERE LOWER(cin) = LOWER($1) LIMIT 1',
-                [req.externalStudent.username || '']
-            );
-            if (studentByCin.rows.length) {
-                const studentId = studentByCin.rows[0].id;
+        if (linkedStudent && sessionTablesExist) {
+            const studentId = linkedStudent.id;
                 const sessionCols = await getTableColumns('sessions_formation');
                 const formationCols = await getTableColumns('formations');
                 const hasFormationTable = formationCols.size > 0;
@@ -774,17 +1028,26 @@ router.get('/student/dashboard', requireExternalStudentToken, async (req, res) =
                     id: row.session_id,
                     title: row.session_title
                 }));
-            }
         }
+
+        const rawStatus = String(
+            linkedStudent?.statut_compte
+            || profileRow?.status
+            || profileRow?.account_status
+            || profileRow?.validation_status
+            || 'active'
+        ).toLowerCase();
+        const accountStatus = rawStatus === 'inactif' ? 'pending' : rawStatus;
 
         return res.json({
             success: true,
             profile,
-            account_status: 'active',
+            account_status: accountStatus,
             stats: {
                 formations_count: formations.length,
                 sessions_count: sessions.length
             },
+            student_id: linkedStudent?.id || null,
             formations,
             sessions
         });

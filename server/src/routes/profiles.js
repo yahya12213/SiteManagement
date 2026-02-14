@@ -56,6 +56,11 @@ function generateProfileId(columnsMeta) {
   return randomUUID();
 }
 
+function isUuidLike(value) {
+  return typeof value === 'string'
+    && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.trim());
+}
+
 async function getAllowedProfileRoles(client) {
   try {
     const result = await client.query(`
@@ -559,6 +564,15 @@ router.post('/',
       const syntheticId = generateProfileId(profileMeta);
       if (syntheticId) {
         id = syntheticId;
+      } else {
+        const idMeta = profileMeta.get('id');
+        const isNumeric = idMeta
+          && (['integer', 'bigint', 'smallint'].includes(idMeta.data_type)
+            || ['int4', 'int8', 'int2'].includes(idMeta.udt_name));
+        if (idMeta && !idMeta.column_default && isNumeric) {
+          const nextId = await client.query('SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM profiles');
+          id = nextId.rows[0]?.next_id;
+        }
       }
     }
 
@@ -577,7 +591,13 @@ router.post('/',
     if (profileMeta.has('password')) push('password', hashedPassword);
     if (profileMeta.has('full_name')) push('full_name', full_name);
     if (profileMeta.has('role')) push('role', resolvedRoleName || profileRoleName);
-    if (profileMeta.has('role_id') && resolvedRoleId) push('role_id', resolvedRoleId);
+    if (profileMeta.has('role_id') && resolvedRoleId) {
+      const roleIdMeta = profileMeta.get('role_id');
+      const expectsUuid = roleIdMeta && (roleIdMeta.data_type === 'uuid' || roleIdMeta.udt_name === 'uuid');
+      if (!expectsUuid || isUuidLike(String(resolvedRoleId))) {
+        push('role_id', resolvedRoleId);
+      }
+    }
     if (profileMeta.has('profile_image_url') && profileMeta.get('profile_image_url').is_nullable === 'NO') {
       push('profile_image_url', '');
     }

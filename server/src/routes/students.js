@@ -166,7 +166,11 @@ router.get('/with-sessions',
       ? 's.profile_image_url'
       : 'NULL::text as profile_image_url';
 
-    const hasJoinTables = enrollmentCols.size > 0 && sessionCols.size > 0;
+    const hasJoinTables = enrollmentCols.size > 0
+      && sessionCols.size > 0
+      && enrollmentCols.has('student_id')
+      && enrollmentCols.has('session_id')
+      && sessionCols.has('id');
     if (!hasJoinTables) {
       const fallback = await pool.query(`
         SELECT
@@ -235,14 +239,14 @@ router.get('/with-sessions',
       ? 'sf.statut'
       : (sessionCols.has('status') ? 'sf.status as session_statut' : 'NULL::text as session_statut');
 
-    const cityJoin = cityFk && cityCols.size > 0
+    const cityJoin = cityFk && cityCols.size > 0 && cityCols.has('name') && cityCols.has('id')
       ? `LEFT JOIN cities c ON sf.${cityFk} = c.id`
       : '';
-    const cityNameExpr = cityFk && cityCols.size > 0 ? 'c.name as ville' : 'NULL::text as ville';
+    const cityNameExpr = cityFk && cityCols.size > 0 && cityCols.has('name') ? 'c.name as ville' : 'NULL::text as ville';
 
     let formationJoin = '';
     let formationExpr = 'NULL::text as formation_titre';
-    if (sessionCols.has('corps_formation_id') && corpsCols.size > 0) {
+    if (sessionCols.has('corps_formation_id') && corpsCols.size > 0 && corpsCols.has('id') && corpsCols.has('name')) {
       formationJoin = 'LEFT JOIN corps_formation cf ON sf.corps_formation_id = cf.id';
       formationExpr = 'cf.name as formation_titre';
     } else if (sessionCols.has('formation_id') && formationCols.size > 0) {
@@ -313,12 +317,24 @@ router.get('/',
       return res.json([]);
     }
 
+    const emailExpr = studentCols.has('email') ? 'email' : 'NULL::text as email';
+    const whatsappExpr = studentCols.has('whatsapp') ? 'whatsapp' : 'NULL::text as whatsapp';
+    const dobExpr = studentCols.has('date_naissance') ? 'date_naissance' : 'NULL::date as date_naissance';
+    const birthPlaceExpr = studentCols.has('lieu_naissance') ? 'lieu_naissance' : 'NULL::text as lieu_naissance';
+    const addressExpr = studentCols.has('adresse') ? 'adresse' : 'NULL::text as adresse';
+    const statusExpr = studentCols.has('statut_compte')
+      ? 'statut_compte'
+      : (studentCols.has('status') ? 'status as statut_compte' : "'actif' as statut_compte");
+    const imageExpr = studentCols.has('profile_image_url') ? 'profile_image_url' : 'NULL::text as profile_image_url';
+    const createdAtExpr = studentCols.has('created_at') ? 'created_at' : 'NOW() as created_at';
+    const updatedAtExpr = studentCols.has('updated_at') ? 'updated_at' : 'NOW() as updated_at';
+
     const result = await pool.query(
-      `SELECT id, nom, prenom, cin, email, phone, whatsapp,
-              date_naissance, lieu_naissance, adresse, statut_compte, profile_image_url,
-              created_at, updated_at
+      `SELECT id, nom, prenom, cin, ${emailExpr}, phone, ${whatsappExpr},
+              ${dobExpr}, ${birthPlaceExpr}, ${addressExpr}, ${statusExpr}, ${imageExpr},
+              ${createdAtExpr}, ${updatedAtExpr}
        FROM students
-       ORDER BY created_at DESC`
+       ORDER BY id DESC`
     );
 
     res.json(result.rows);
