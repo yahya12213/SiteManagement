@@ -1037,7 +1037,7 @@ router.get('/payslips/:id',
         const hasPermission = await pool.query(`
           SELECT 1 FROM role_permissions rp
           JOIN permissions p ON p.id = rp.permission_id
-          JOIN profiles pr ON pr.role_id = rp.role_id
+          JOIN profiles pr ON pr.role_id::uuid = rp.role_id
           WHERE pr.id = $1
           AND p.code IN (
             'ressources_humaines.gestion_paie.bulletins.voir',
@@ -1141,7 +1141,7 @@ router.get('/payslips/:id/pdf',
         const hasPermission = await pool.query(`
           SELECT p.code FROM role_permissions rp
           JOIN permissions p ON p.id = rp.permission_id
-          JOIN profiles pr ON pr.role_id = rp.role_id
+          JOIN profiles pr ON pr.role_id::uuid = rp.role_id
           WHERE pr.id = $1
           AND (
             p.code LIKE '%paie%'
