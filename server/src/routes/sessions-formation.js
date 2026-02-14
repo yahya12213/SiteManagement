@@ -85,6 +85,45 @@ async function ensureSessionsFormationSchema() {
             updated_at TIMESTAMP DEFAULT NOW()
           )
         `);
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS session_etudiants (
+            id TEXT PRIMARY KEY,
+            session_id TEXT NOT NULL,
+            student_id TEXT NOT NULL,
+            statut_paiement VARCHAR(50) DEFAULT 'impaye',
+            montant_total DECIMAL(10, 2) DEFAULT 0,
+            montant_paye DECIMAL(10, 2) DEFAULT 0,
+            montant_du DECIMAL(10, 2) DEFAULT 0,
+            date_inscription TIMESTAMP DEFAULT NOW(),
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW(),
+            UNIQUE(session_id, student_id)
+          )
+        `);
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS session_professeurs (
+            id TEXT PRIMARY KEY,
+            session_id TEXT NOT NULL,
+            professeur_id TEXT NOT NULL,
+            date_affectation TIMESTAMP DEFAULT NOW(),
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW(),
+            UNIQUE(session_id, professeur_id)
+          )
+        `);
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS session_fichiers (
+            id TEXT PRIMARY KEY,
+            session_id TEXT NOT NULL,
+            type VARCHAR(50) NOT NULL,
+            titre VARCHAR(255) NOT NULL,
+            file_url VARCHAR(500),
+            file_name VARCHAR(255),
+            file_size INTEGER,
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW()
+          )
+        `);
 
         await client.query(`
           ALTER TABLE sessions_formation
@@ -136,6 +175,14 @@ async function ensureSessionsFormationSchema() {
         await client.query(`
           CREATE INDEX IF NOT EXISTS idx_sessions_formation_type
           ON sessions_formation(session_type)
+        `);
+        await client.query(`
+          CREATE INDEX IF NOT EXISTS idx_session_etudiants_session
+          ON session_etudiants(session_id)
+        `);
+        await client.query(`
+          CREATE INDEX IF NOT EXISTS idx_session_professeurs_session
+          ON session_professeurs(session_id)
         `);
 
         await client.query('COMMIT');
