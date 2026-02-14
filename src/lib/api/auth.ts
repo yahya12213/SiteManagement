@@ -39,21 +39,25 @@ export const authApi = {
    * Connexion utilisateur - retourne token JWT
    */
   async login(username: string, password: string): Promise<LoginResponse> {
-    const response = await djangoClient.post<any>('/auth/login/', { username, password });
+    const response = await djangoClient.post<any>('/auth/login', { username, password });
 
-    // Map Django response to frontend LoginResponse
+    if (!response.data.success) {
+      throw new Error(response.data.error || 'Login failed');
+    }
+
+    // Map Express response to frontend LoginResponse
     return {
       success: true,
       user: {
         id: response.data.user.id.toString(),
         username: response.data.user.username,
         full_name: response.data.user.full_name || response.data.user.username,
-        role: response.data.user.role.toLowerCase(), // Ensure lowercase for frontend
-        profile_image_url: response.data.user.profile_picture,
+        role: (response.data.user.role || '').toLowerCase(), // Ensure lowercase for frontend
+        profile_image_url: response.data.user.profile_image_url || response.data.user.profile_picture,
       },
-      token: response.data.access,
-      permissions: [], // Students typically have no specific permissions in this system yet
-      expiresIn: '15m', // Approx
+      token: response.data.token,
+      permissions: response.data.permissions || [],
+      expiresIn: response.data.expiresIn || '24h',
     };
   },
 
@@ -61,18 +65,18 @@ export const authApi = {
    * Obtenir l'utilisateur actuel (vérifie le token)
    */
   async getCurrentUser(): Promise<AuthResponse> {
-    const response = await djangoClient.get<any>('/student/profile/');
+    const response = await djangoClient.get<any>('/auth/me');
 
     return {
       success: true,
       user: {
         id: response.data.user.id.toString(),
         username: response.data.user.username,
-        full_name: response.data.full_name,
-        role: response.data.role.toLowerCase(),
-        profile_image_url: response.data.profile_picture,
+        full_name: response.data.user.full_name,
+        role: (response.data.user.role || '').toLowerCase(),
+        profile_image_url: response.data.user.profile_image_url || response.data.user.profile_picture,
       },
-      permissions: [],
+      permissions: response.data.permissions || [],
     };
   },
 
@@ -80,13 +84,13 @@ export const authApi = {
    * Rafraîchir le token
    */
   async refreshToken(): Promise<RefreshTokenResponse> {
-    const refreshToken = localStorage.getItem('refresh_token');
-    const response = await djangoClient.post<any>('/auth/refresh/', { refresh: refreshToken });
+    const token = localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
+    const response = await djangoClient.post<any>('/auth/refresh', { refresh: token });
 
     return {
       success: true,
-      token: response.data.access,
-      expiresIn: '15m'
+      token: response.data.token,
+      expiresIn: response.data.expiresIn || '24h'
     };
   },
 
@@ -95,8 +99,7 @@ export const authApi = {
    */
   async logout(): Promise<{ success: boolean; message: string }> {
     try {
-      const refreshToken = localStorage.getItem('refresh_token');
-      await djangoClient.post('/auth/logout/', { refresh: refreshToken });
+      await djangoClient.post('/auth/logout');
     } catch (e) {
       console.error('Logout failed', e);
     }
