@@ -66,7 +66,7 @@ router.post('/login', loginRateLimiter, async (req, res) => {
       result = await pool.query(
         `SELECT p.*, r.name as role_name, r.description as role_description
          FROM profiles p
-         LEFT JOIN roles r ON p.role_id = r.id
+         LEFT JOIN roles r ON p.role_id::uuid = r.id
          WHERE p.username = $1`,
         [username]
       );
