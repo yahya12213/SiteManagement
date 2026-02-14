@@ -1,5 +1,7 @@
 
 import express from 'express';
+import bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
 import pool from '../config/database.js';
 
 const router = express.Router();
@@ -16,6 +18,21 @@ async function getFormationColumns() {
 
 function hasCol(columns, column) {
     return columns.has(column);
+}
+
+async function getProfileColumnsMeta() {
+    const result = await pool.query(`
+      SELECT column_name, data_type, udt_name, column_default
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'profiles'
+    `);
+
+    const meta = new Map();
+    for (const row of result.rows) {
+        meta.set(row.column_name, row);
+    }
+    return meta;
 }
 
 /**
@@ -153,6 +170,114 @@ router.get('/formations/:slug', async (req, res) => {
     } catch (error) {
         console.error('Error fetching formation details:', error);
         res.status(500).json({ error: 'Error fetching formation details' });
+    }
+});
+
+/**
+ * POST /api/public/student-register
+ * Public endpoint for Prolean signup. Creates a STUDENT profile in management DB.
+ */
+router.post('/student-register', async (req, res) => {
+    try {
+        const {
+            full_name,
+            email,
+            password,
+            cin_or_passport,
+            phone_number,
+            city_id
+        } = req.body || {};
+
+        if (!full_name || !email || !password) {
+            return res.status(400).json({ error: 'full_name, email and password are required' });
+        }
+
+        const username = String(email).trim().toLowerCase();
+        const profileMeta = await getProfileColumnsMeta();
+        if (profileMeta.size === 0) {
+            return res.status(500).json({ error: 'profiles table metadata not found' });
+        }
+
+        const dupParams = [username];
+        let duplicateSql = 'SELECT 1 FROM profiles WHERE username = $1';
+        if (profileMeta.has('email')) {
+            dupParams.push(username);
+            duplicateSql += ` OR email = $${dupParams.length}`;
+        }
+        const duplicate = await pool.query(duplicateSql, dupParams);
+        if (duplicate.rows.length > 0) {
+            return res.status(409).json({ error: 'Email already used' });
+        }
+
+        const insertCols = [];
+        const insertVals = [];
+        const placeholders = [];
+        let paramIndex = 1;
+
+        const idMeta = profileMeta.get('id');
+        if (idMeta && !idMeta.column_default) {
+            const isUuid = idMeta.data_type === 'uuid' || idMeta.udt_name === 'uuid';
+            if (!isUuid) {
+                return res.status(500).json({ error: 'profiles.id requires a value but is not UUID' });
+            }
+            insertCols.push('id');
+            insertVals.push(randomUUID());
+            placeholders.push(`$${paramIndex++}`);
+        }
+
+        const hashedPassword = await bcrypt.hash(String(password), 10);
+
+        const optionalFields = [
+            ['email', username],
+            ['phone_number', phone_number || null],
+            ['cin_or_passport', cin_or_passport || null],
+            ['city_id', city_id || null]
+        ];
+
+        const requiredFields = [
+            ['username', username],
+            ['password', hashedPassword],
+            ['full_name', String(full_name).trim()]
+        ];
+        for (const [col, val] of requiredFields) {
+            if (!profileMeta.has(col)) {
+                return res.status(500).json({ error: `profiles.${col} column is required` });
+            }
+            insertCols.push(col);
+            insertVals.push(val);
+            placeholders.push(`$${paramIndex++}`);
+        }
+
+        if (profileMeta.has('role')) {
+            insertCols.push('role');
+            insertVals.push('STUDENT');
+            placeholders.push(`$${paramIndex++}`);
+        }
+
+        for (const [col, val] of optionalFields) {
+            if (profileMeta.has(col) && val) {
+                insertCols.push(col);
+                insertVals.push(val);
+                placeholders.push(`$${paramIndex++}`);
+            }
+        }
+
+        const query = `
+          INSERT INTO profiles (${insertCols.join(', ')})
+          VALUES (${placeholders.join(', ')})
+          RETURNING id, username, full_name, role, created_at
+        `;
+        const result = await pool.query(query, insertVals);
+        return res.status(201).json({
+            message: 'Student registered successfully',
+            profile: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Error in public student-register:', error);
+        if (error.code === '23505') {
+            return res.status(409).json({ error: 'Email already used' });
+        }
+        return res.status(500).json({ error: 'Error creating student account' });
     }
 });
 
