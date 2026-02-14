@@ -149,6 +149,9 @@ router.get('/with-sessions',
   async (req, res) => {
   try {
     const studentCols = await getTableColumns('students');
+    if (studentCols.size === 0) {
+      return res.json([]);
+    }
     const enrollmentCols = await getTableColumns('session_etudiants');
     const sessionCols = await getTableColumns('sessions_formation');
     const cityCols = await getTableColumns('cities');
@@ -305,6 +308,11 @@ router.get('/',
   requirePermission('training.students.view_page'),
   async (req, res) => {
   try {
+    const studentCols = await getTableColumns('students');
+    if (studentCols.size === 0) {
+      return res.json([]);
+    }
+
     const result = await pool.query(
       `SELECT id, nom, prenom, cin, email, phone, whatsapp,
               date_naissance, lieu_naissance, adresse, statut_compte, profile_image_url,

@@ -35,6 +35,42 @@ async function getProfileColumnsMeta() {
     return meta;
 }
 
+async function resolveStudentRole() {
+    const preferredNames = ['student', 'etudiant', 'assistante', 'gerant', 'professor', 'comptable', 'superviseur', 'admin'];
+    const existing = await pool.query(
+        `SELECT id, name
+         FROM roles
+         WHERE LOWER(name) = ANY($1::text[])
+         ORDER BY
+           CASE
+             WHEN LOWER(name) = 'student' THEN 0
+             WHEN LOWER(name) = 'etudiant' THEN 1
+             WHEN LOWER(name) = 'assistante' THEN 2
+             WHEN LOWER(name) = 'gerant' THEN 3
+             WHEN LOWER(name) = 'professor' THEN 4
+             WHEN LOWER(name) = 'comptable' THEN 5
+             WHEN LOWER(name) = 'superviseur' THEN 6
+             WHEN LOWER(name) = 'admin' THEN 7
+             ELSE 99
+           END
+         LIMIT 1`,
+        [preferredNames]
+    );
+    if (existing.rows.length > 0) {
+        return existing.rows[0];
+    }
+
+    const roleId = randomUUID();
+    const created = await pool.query(
+        `INSERT INTO roles (id, name, description, is_system_role, created_at, updated_at)
+         VALUES ($1, $2, $3, false, NOW(), NOW())
+         ON CONFLICT (name) DO UPDATE SET updated_at = NOW()
+         RETURNING id, name`,
+        [roleId, 'student', 'Student role for API registration']
+    );
+    return created.rows[0];
+}
+
 function normalizeCityId(rawCityId, profileMeta) {
     if (!rawCityId || !profileMeta.has('city_id')) {
         return null;
@@ -281,25 +317,21 @@ router.post('/student-register', async (req, res) => {
             placeholders.push(`$${paramIndex++}`);
         }
 
+        let selectedRole = null;
+        if (profileMeta.has('role') || profileMeta.has('role_id')) {
+            selectedRole = await resolveStudentRole();
+        }
+
         if (profileMeta.has('role')) {
             insertCols.push('role');
-            insertVals.push('student');
+            insertVals.push(selectedRole?.name || 'student');
             placeholders.push(`$${paramIndex++}`);
         }
 
-        if (profileMeta.has('role_id')) {
-            const roleIdResult = await pool.query(
-                `SELECT id
-                 FROM roles
-                 WHERE LOWER(name) IN ('student', 'etudiant')
-                 ORDER BY CASE WHEN LOWER(name) = 'student' THEN 0 ELSE 1 END
-                 LIMIT 1`
-            );
-            if (roleIdResult.rows.length > 0) {
-                insertCols.push('role_id');
-                insertVals.push(roleIdResult.rows[0].id);
-                placeholders.push(`$${paramIndex++}`);
-            }
+        if (profileMeta.has('role_id') && selectedRole?.id) {
+            insertCols.push('role_id');
+            insertVals.push(selectedRole.id);
+            placeholders.push(`$${paramIndex++}`);
         }
 
         if (profileMeta.has('created_at') && !profileMeta.get('created_at').column_default) {
