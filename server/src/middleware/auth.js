@@ -382,7 +382,7 @@ export const getUserPermissions = async (userId) => {
       FROM permissions p
       INNER JOIN role_permissions rp ON p.id = rp.permission_id
       INNER JOIN user_roles ur ON rp.role_id = ur.role_id
-      WHERE ur.user_id = $1
+      WHERE ur.user_id::text = $1::text
     `;
     let result = await pool.query(query, [userId]);
 
@@ -391,10 +391,9 @@ export const getUserPermissions = async (userId) => {
       query = `
         SELECT DISTINCT p.code
         FROM permissions p
-        INNER JOIN role_permissions rp ON p.id = rp.permission_id
-        INNER JOIN roles r ON rp.role_id = r.id
-        INNER JOIN profiles pr ON pr.role_id = r.id
-        WHERE pr.id = $1
+        INNER JOIN roles r ON rp.role_id::text = r.id::text
+        INNER JOIN profiles pr ON pr.role_id::text = r.id::text
+        WHERE pr.id::text = $1::text
       `;
       result = await pool.query(query, [userId]);
     }
@@ -404,10 +403,9 @@ export const getUserPermissions = async (userId) => {
       query = `
         SELECT DISTINCT p.code
         FROM permissions p
-        INNER JOIN role_permissions rp ON p.id = rp.permission_id
-        INNER JOIN roles r ON rp.role_id = r.id
+        INNER JOIN roles r ON rp.role_id::text = r.id::text
         INNER JOIN profiles pr ON pr.role = r.name
-        WHERE pr.id = $1
+        WHERE pr.id::text = $1::text
       `;
       result = await pool.query(query, [userId]);
 
@@ -432,8 +430,8 @@ export const getUserRole = async (userId) => {
     const query = `
       SELECT r.*
       FROM roles r
-      INNER JOIN profiles p ON p.role_id = r.id
-      WHERE p.id = $1
+      INNER JOIN profiles p ON p.role_id::text = r.id::text
+      WHERE p.id::text = $1::text
     `;
     const result = await pool.query(query, [userId]);
     return result.rows[0] || null;

@@ -54,16 +54,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize auth state from storage
   useEffect(() => {
     const initAuth = () => {
-      const savedUser = tokenManager.getUser();
-      const savedToken = tokenManager.getToken();
-      const savedPermissions = tokenManager.getPermissions();
+      try {
+        const savedUser = tokenManager.getUser();
+        const savedToken = tokenManager.getToken();
+        const savedPermissions = tokenManager.getPermissions();
 
-      if (savedUser && savedToken) {
-        setUser(savedUser);
-        setPermissions(savedPermissions);
-        setSessionTimeRemaining(tokenManager.getRemainingTime());
+        if (savedUser && savedToken) {
+          setUser(savedUser);
+          setPermissions(savedPermissions);
+          setSessionTimeRemaining(tokenManager.getRemainingTime());
+        }
+      } catch (error) {
+        console.error('Error during auth initialization:', error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initAuth();

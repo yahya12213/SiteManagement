@@ -24,8 +24,8 @@ router.get('/', requirePermission('system.roles.view_page'), async (req, res) =>
         COUNT(DISTINCT rp.permission_id) as permission_count,
         COUNT(DISTINCT p.id) as user_count
       FROM roles r
-      LEFT JOIN role_permissions rp ON r.id = rp.role_id
-      LEFT JOIN profiles p ON p.role_id = r.id
+      LEFT JOIN role_permissions rp ON r.id::text = rp.role_id::text
+      LEFT JOIN profiles p ON p.role_id::text = r.id::text
       GROUP BY r.id
       ORDER BY r.is_system_role DESC, r.name ASC
     `);
@@ -226,7 +226,7 @@ router.get('/:id', requirePermission('system.roles.view_page'), async (req, res)
   try {
     const { id } = req.params;
 
-    const roleResult = await pool.query('SELECT * FROM roles WHERE id = $1', [id]);
+    const roleResult = await pool.query('SELECT * FROM roles WHERE id::text = $1::text', [id]);
     if (roleResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -237,15 +237,15 @@ router.get('/:id', requirePermission('system.roles.view_page'), async (req, res)
     const permissionsResult = await pool.query(`
       SELECT p.*
       FROM permissions p
-      INNER JOIN role_permissions rp ON p.id = rp.permission_id
-      WHERE rp.role_id = $1
+      INNER JOIN role_permissions rp ON p.id::text = rp.permission_id::text
+      WHERE rp.role_id::text = $1::text
       ORDER BY p.module, p.name
     `, [id]);
 
     const usersResult = await pool.query(`
       SELECT id, username, full_name
       FROM profiles
-      WHERE role_id = $1
+      WHERE role_id::text = $1::text
       ORDER BY full_name
     `, [id]);
 
@@ -342,7 +342,7 @@ router.put('/:id', requirePermission('system.roles.update'), async (req, res) =>
     const { name, description, permission_ids } = req.body;
 
     // Check if role exists and is not a system role
-    const existingRole = await client.query('SELECT * FROM roles WHERE id = $1', [id]);
+    const existingRole = await client.query('SELECT * FROM roles WHERE id::text = $1::text', [id]);
     if (existingRole.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -365,7 +365,7 @@ router.put('/:id', requirePermission('system.roles.update'), async (req, res) =>
        SET name = COALESCE($1, name),
            description = COALESCE($2, description),
            updated_at = NOW()
-       WHERE id = $3
+       WHERE id::text = $3::text
        RETURNING *`,
       [name?.trim(), description, id]
     );
@@ -373,7 +373,7 @@ router.put('/:id', requirePermission('system.roles.update'), async (req, res) =>
     // Update permissions if provided
     if (permission_ids && Array.isArray(permission_ids)) {
       // Remove existing permissions
-      await client.query('DELETE FROM role_permissions WHERE role_id = $1', [id]);
+      await client.query('DELETE FROM role_permissions WHERE role_id::text = $1::text', [id]);
 
       // Add new permissions
       for (const permId of permission_ids) {
@@ -420,7 +420,7 @@ router.delete('/:id', requirePermission('system.roles.delete'), async (req, res)
     const { id } = req.params;
 
     // Check if role exists and is not a system role
-    const roleResult = await pool.query('SELECT * FROM roles WHERE id = $1', [id]);
+    const roleResult = await pool.query('SELECT * FROM roles WHERE id::text = $1::text', [id]);
     if (roleResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -436,7 +436,7 @@ router.delete('/:id', requirePermission('system.roles.delete'), async (req, res)
     }
 
     // Check if any users have this role
-    const usersResult = await pool.query('SELECT COUNT(*) FROM profiles WHERE role_id = $1', [id]);
+    const usersResult = await pool.query('SELECT COUNT(*) FROM profiles WHERE role_id::text = $1::text', [id]);
     if (parseInt(usersResult.rows[0].count) > 0) {
       return res.status(400).json({
         success: false,
@@ -445,7 +445,7 @@ router.delete('/:id', requirePermission('system.roles.delete'), async (req, res)
     }
 
     // Delete the role (role_permissions will be cascaded)
-    await pool.query('DELETE FROM roles WHERE id = $1', [id]);
+    await pool.query('DELETE FROM roles WHERE id::text = $1::text', [id]);
 
     res.json({
       success: true,
@@ -471,7 +471,7 @@ router.post('/:id/duplicate', requirePermission('system.roles.create'), async (r
     const { name, description } = req.body;
 
     // Check if source role exists
-    const sourceRoleResult = await client.query('SELECT * FROM roles WHERE id = $1', [id]);
+    const sourceRoleResult = await client.query('SELECT * FROM roles WHERE id::text = $1::text', [id]);
     if (sourceRoleResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -507,9 +507,9 @@ router.post('/:id/duplicate', requirePermission('system.roles.create'), async (r
     // 2. Copy all permissions from source role to new role
     const permissionsCopyResult = await client.query(`
       INSERT INTO role_permissions (role_id, permission_id, granted_at)
-      SELECT $1, permission_id, NOW()
+      SELECT $1::uuid, permission_id, NOW()
       FROM role_permissions
-      WHERE role_id = $2
+      WHERE role_id::text = $2::text
       RETURNING permission_id
     `, [newRole.id, sourceRole.id]);
 
@@ -586,7 +586,7 @@ router.put('/user/:userId/role', requirePermission('accounting.users.assign_role
     }
 
     // Check if role exists
-    const roleExists = await pool.query('SELECT * FROM roles WHERE id = $1', [role_id]);
+    const roleExists = await pool.query('SELECT * FROM roles WHERE id::text = $1::text', [role_id]);
     if (roleExists.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -598,7 +598,7 @@ router.put('/user/:userId/role', requirePermission('accounting.users.assign_role
     const result = await pool.query(
       `UPDATE profiles
        SET role_id = $1, role = $2
-       WHERE id = $3
+       WHERE id::text = $3::text
        RETURNING id, username, full_name, role, role_id`,
       [role_id, roleExists.rows[0].name, userId]
     );
