@@ -334,6 +334,12 @@ router.post('/student-register', async (req, res) => {
             placeholders.push(`$${paramIndex++}`);
         }
 
+        if (profileMeta.has('profile_image_url') && !profileMeta.get('profile_image_url').is_nullable) {
+            insertCols.push('profile_image_url');
+            insertVals.push('');
+            placeholders.push(`$${paramIndex++}`);
+        }
+
         if (profileMeta.has('created_at') && !profileMeta.get('created_at').column_default) {
             insertCols.push('created_at');
             insertVals.push(new Date());

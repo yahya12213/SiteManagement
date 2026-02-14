@@ -2,6 +2,7 @@ import express from 'express';
 import pool from '../config/database.js';
 import bcrypt from 'bcryptjs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 import { authenticateToken, requirePermission } from '../middleware/auth.js';
 import { injectUserScope } from '../middleware/requireScope.js';
 import { uploadProfileImage, deleteFile } from '../middleware/upload.js';
@@ -27,6 +28,32 @@ function getTablesForRole(role) {
     citiesTable: 'professor_cities',
     userIdColumn: 'professor_id'
   };
+}
+
+async function getProfileColumnsMeta(client) {
+  const result = await client.query(
+    `SELECT column_name, data_type, udt_name, column_default, is_nullable
+     FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'profiles'`
+  );
+  const meta = new Map();
+  for (const row of result.rows) {
+    meta.set(row.column_name, row);
+  }
+  return meta;
+}
+
+function generateProfileId(columnsMeta) {
+  const idMeta = columnsMeta.get('id');
+  if (!idMeta || idMeta.column_default) {
+    return null;
+  }
+  const isNumeric = ['integer', 'bigint', 'smallint'].includes(idMeta.data_type)
+    || ['int4', 'int8', 'int2'].includes(idMeta.udt_name);
+  if (isNumeric) {
+    return null;
+  }
+  return randomUUID();
 }
 
 /**
@@ -410,7 +437,7 @@ router.post('/',
       create_employee, cin, hire_date, position, department
     } = req.body;
 
-    if (!id || !username || !password || !full_name || !role) {
+    if (!username || !password || !full_name || !role) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -460,39 +487,78 @@ router.post('/',
     // Hash du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Créer le profil
+    const profileMeta = await getProfileColumnsMeta(client);
+    const roleResult = await client.query(
+      'SELECT id, name FROM roles WHERE LOWER(name) = LOWER($1) LIMIT 1',
+      [role]
+    );
+    let resolvedRoleId = roleResult.rows[0]?.id || null;
+    let resolvedRoleName = roleResult.rows[0]?.name || role;
+
+    if (!resolvedRoleId && profileMeta.has('role_id')) {
+      const fallbackRole = await client.query('SELECT id, name FROM roles ORDER BY created_at ASC LIMIT 1');
+      if (fallbackRole.rows.length > 0) {
+        resolvedRoleId = fallbackRole.rows[0].id;
+        resolvedRoleName = fallbackRole.rows[0].name;
+      }
+    }
+
+    if (!id) {
+      const syntheticId = generateProfileId(profileMeta);
+      if (syntheticId) {
+        id = syntheticId;
+      }
+    }
+
+    const insertCols = [];
+    const insertVals = [];
+    const placeholders = [];
+    let paramIndex = 1;
+    const push = (col, val) => {
+      insertCols.push(col);
+      insertVals.push(val);
+      placeholders.push(`$${paramIndex++}`);
+    };
+
+    if (profileMeta.has('id') && id) push('id', id);
+    if (profileMeta.has('username')) push('username', username);
+    if (profileMeta.has('password')) push('password', hashedPassword);
+    if (profileMeta.has('full_name')) push('full_name', full_name);
+    if (profileMeta.has('role')) push('role', resolvedRoleName || role);
+    if (profileMeta.has('role_id') && resolvedRoleId) push('role_id', resolvedRoleId);
+    if (profileMeta.has('profile_image_url') && profileMeta.get('profile_image_url').is_nullable === 'NO') {
+      push('profile_image_url', '');
+    }
+    if (profileMeta.has('created_at') && !profileMeta.get('created_at').column_default) {
+      push('created_at', new Date());
+    }
+    if (profileMeta.has('updated_at') && !profileMeta.get('updated_at').column_default) {
+      push('updated_at', new Date());
+    }
+
     const profileResult = await client.query(
-      'INSERT INTO profiles (id, username, password, full_name, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, full_name, role, created_at',
-      [id, username, hashedPassword, full_name, role]
+      `INSERT INTO profiles (${insertCols.join(', ')})
+       VALUES (${placeholders.join(', ')})
+       RETURNING id, username, full_name, role, created_at`,
+      insertVals
     );
 
     const profile = profileResult.rows[0];
+    const profileId = profile.id;
 
-    // Assigner le rôle RBAC - recherche insensible à la casse
-    const roleResult = await client.query(
-      'SELECT id FROM roles WHERE LOWER(name) = LOWER($1)',
-      [role]
-    );
-    if (roleResult.rows.length > 0) {
-      const roleId = roleResult.rows[0].id;
-
-      // Mettre à jour role_id dans profiles
-      await client.query(
-        'UPDATE profiles SET role_id = $1 WHERE id = $2',
-        [roleId, id]
-      );
-
-      // Assigner dans user_roles (si cette table est utilisée)
-      await client.query(`
-        INSERT INTO user_roles (user_id, role_id)
-        VALUES ($1, $2)
-        ON CONFLICT (user_id, role_id) DO NOTHING
-      `, [id, roleId]);
-    } else {
-      console.warn(`⚠️ Rôle "${role}" non trouvé dans la table roles lors de la création de l'utilisateur ${username}`);
+    if (resolvedRoleId) {
+      try {
+        await client.query(`
+          INSERT INTO user_roles (user_id, role_id)
+          VALUES ($1, $2)
+          ON CONFLICT (user_id, role_id) DO NOTHING
+        `, [profileId, resolvedRoleId]);
+      } catch (roleMapError) {
+        console.warn('Skipping user_roles mapping:', roleMapError.message);
+      }
     }
 
-    // Créer l'employé si demandé
+    // Cr?er l'employ? si demand?
     if (create_employee) {
       const nameParts = full_name.trim().split(' ');
       const firstName = nameParts[0] || username;
@@ -510,7 +576,7 @@ router.post('/',
         employeeNumber,
         firstName,
         lastName,
-        id,
+        profileId,
         cin || null,
         hire_date || new Date().toISOString().split('T')[0],
         position || null,
@@ -518,7 +584,7 @@ router.post('/',
       ]);
 
       profile.employee = employeeResult.rows[0];
-      console.log(`✅ Employé créé pour ${username}: ${employeeNumber}`);
+      console.log(`Created employee for ${username}: ${employeeNumber}`);
     }
 
     const tables = getTablesForRole(role);
@@ -528,7 +594,7 @@ router.post('/',
       for (const segmentId of segment_ids) {
         await client.query(
           `INSERT INTO ${tables.segmentsTable} (${tables.userIdColumn}, segment_id) VALUES ($1, $2)`,
-          [id, segmentId]
+          [profileId, segmentId]
         );
       }
       profile.segment_ids = segment_ids;
@@ -539,7 +605,7 @@ router.post('/',
       for (const cityId of city_ids) {
         await client.query(
           `INSERT INTO ${tables.citiesTable} (${tables.userIdColumn}, city_id) VALUES ($1, $2)`,
-          [id, cityId]
+          [profileId, cityId]
         );
       }
       profile.city_ids = city_ids;
@@ -550,7 +616,7 @@ router.post('/',
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Error creating profile:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   } finally {
     client.release();
   }
