@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { usePublicFormations, usePublicCities } from '@/hooks/useStudent';
 import { studentApi } from '@/lib/api/student';
@@ -52,8 +53,8 @@ const Header: React.FC = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+        ? 'bg-white/95 backdrop-blur-md shadow-lg'
+        : 'bg-transparent'
         }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -695,8 +696,8 @@ const TestimonialsSection: React.FC = () => {
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                    ? 'bg-violet-600 w-8'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                  ? 'bg-violet-600 w-8'
+                  : 'bg-gray-300 hover:bg-gray-400'
                   }`}
               />
             ))}
