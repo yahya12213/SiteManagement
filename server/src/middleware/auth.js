@@ -233,9 +233,14 @@ export const authenticateToken = (req, res, next) => {
   }
 
   const authHeader = req.headers['authorization'];
+  console.log('Auth Debug - Headers:', JSON.stringify(req.headers));
+  console.log('Auth Debug - Authorization Header:', authHeader);
+
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  console.log('Auth Debug - Extracted Token:', token ? token.substring(0, 10) + '...' : 'null');
 
   if (!token) {
+    console.log('Auth Debug - No token found');
     return res.status(401).json({
       success: false,
       error: 'Access denied. No token provided.',
