@@ -56,6 +56,56 @@ function generateProfileId(columnsMeta) {
   return randomUUID();
 }
 
+async function getAllowedProfileRoles(client) {
+  try {
+    const result = await client.query(`
+      SELECT pg_get_constraintdef(c.oid) AS def
+      FROM pg_constraint c
+      JOIN pg_class t ON t.oid = c.conrelid
+      JOIN pg_namespace n ON n.oid = t.relnamespace
+      WHERE n.nspname = 'public'
+        AND t.relname = 'profiles'
+        AND c.contype = 'c'
+        AND c.conname = 'profiles_role_check'
+      LIMIT 1
+    `);
+    if (!result.rows.length) return null;
+    const def = result.rows[0].def || '';
+    const values = [...def.matchAll(/'([^']+)'/g)].map(m => m[1].toLowerCase());
+    return values.length ? new Set(values) : null;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeRoleForProfileColumn(requestedRole, allowedRoleNames) {
+  const role = String(requestedRole || '').toLowerCase();
+  if (!allowedRoleNames || allowedRoleNames.size === 0) {
+    return role;
+  }
+  if (allowedRoleNames.has(role)) {
+    return role;
+  }
+  const roleMap = {
+    student: 'gerant',
+    etudiant: 'gerant',
+    assistante: 'gerant',
+    comptable: 'gerant',
+    superviseur: 'gerant',
+    professor: 'professor',
+    gerant: 'gerant',
+    admin: 'admin'
+  };
+  const mapped = roleMap[role];
+  if (mapped && allowedRoleNames.has(mapped)) {
+    return mapped;
+  }
+  for (const fallback of ['gerant', 'professor', 'admin']) {
+    if (allowedRoleNames.has(fallback)) return fallback;
+  }
+  return Array.from(allowedRoleNames)[0];
+}
+
 /**
  * GET tous les profils (sans mots de passe)
  * Protected: SBAC filtering only (no permission check)
@@ -488,12 +538,14 @@ router.post('/',
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const profileMeta = await getProfileColumnsMeta(client);
+    const allowedProfileRoles = await getAllowedProfileRoles(client);
+    const profileRoleName = normalizeRoleForProfileColumn(role, allowedProfileRoles);
     const roleResult = await client.query(
       'SELECT id, name FROM roles WHERE LOWER(name) = LOWER($1) LIMIT 1',
-      [role]
+      [profileRoleName]
     );
     let resolvedRoleId = roleResult.rows[0]?.id || null;
-    let resolvedRoleName = roleResult.rows[0]?.name || role;
+    let resolvedRoleName = roleResult.rows[0]?.name || profileRoleName;
 
     if (!resolvedRoleId && profileMeta.has('role_id')) {
       const fallbackRole = await client.query('SELECT id, name FROM roles ORDER BY created_at ASC LIMIT 1');
@@ -524,7 +576,7 @@ router.post('/',
     if (profileMeta.has('username')) push('username', username);
     if (profileMeta.has('password')) push('password', hashedPassword);
     if (profileMeta.has('full_name')) push('full_name', full_name);
-    if (profileMeta.has('role')) push('role', resolvedRoleName || role);
+    if (profileMeta.has('role')) push('role', resolvedRoleName || profileRoleName);
     if (profileMeta.has('role_id') && resolvedRoleId) push('role_id', resolvedRoleId);
     if (profileMeta.has('profile_image_url') && profileMeta.get('profile_image_url').is_nullable === 'NO') {
       push('profile_image_url', '');
@@ -587,7 +639,7 @@ router.post('/',
       console.log(`Created employee for ${username}: ${employeeNumber}`);
     }
 
-    const tables = getTablesForRole(role);
+    const tables = getTablesForRole((resolvedRoleName || profileRoleName || role).toLowerCase());
 
     // Ajouter les segments
     if (segment_ids && segment_ids.length > 0) {

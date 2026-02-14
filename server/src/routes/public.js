@@ -35,8 +35,37 @@ async function getProfileColumnsMeta() {
     return meta;
 }
 
-async function resolveStudentRole() {
+async function getAllowedProfileRoles() {
+    try {
+        const result = await pool.query(`
+          SELECT pg_get_constraintdef(c.oid) AS def
+          FROM pg_constraint c
+          JOIN pg_class t ON t.oid = c.conrelid
+          JOIN pg_namespace n ON n.oid = t.relnamespace
+          WHERE n.nspname = 'public'
+            AND t.relname = 'profiles'
+            AND c.contype = 'c'
+            AND c.conname = 'profiles_role_check'
+          LIMIT 1
+        `);
+        if (!result.rows.length) return null;
+        const def = result.rows[0].def || '';
+        const matches = [...def.matchAll(/'([^']+)'/g)].map(m => m[1].toLowerCase());
+        return matches.length ? new Set(matches) : null;
+    } catch {
+        return null;
+    }
+}
+
+async function resolveStudentRole(allowedRoleNames = null) {
     const preferredNames = ['student', 'etudiant', 'assistante', 'gerant', 'professor', 'comptable', 'superviseur', 'admin'];
+    const effectivePreferred = allowedRoleNames
+        ? preferredNames.filter(name => allowedRoleNames.has(name))
+        : preferredNames;
+    if (effectivePreferred.length === 0 && allowedRoleNames && allowedRoleNames.size > 0) {
+        effectivePreferred.push(...allowedRoleNames);
+    }
+
     const existing = await pool.query(
         `SELECT id, name
          FROM roles
@@ -54,10 +83,14 @@ async function resolveStudentRole() {
              ELSE 99
            END
          LIMIT 1`,
-        [preferredNames]
+        [effectivePreferred]
     );
     if (existing.rows.length > 0) {
         return existing.rows[0];
+    }
+
+    if (allowedRoleNames && !allowedRoleNames.has('student')) {
+        return null;
     }
 
     const roleId = randomUUID();
@@ -251,6 +284,7 @@ router.post('/student-register', async (req, res) => {
 
         const username = String(email).trim().toLowerCase();
         const profileMeta = await getProfileColumnsMeta();
+        const allowedProfileRoles = await getAllowedProfileRoles();
         if (profileMeta.size === 0) {
             return res.status(500).json({ error: 'profiles table metadata not found' });
         }
@@ -319,7 +353,18 @@ router.post('/student-register', async (req, res) => {
 
         let selectedRole = null;
         if (profileMeta.has('role') || profileMeta.has('role_id')) {
-            selectedRole = await resolveStudentRole();
+            selectedRole = await resolveStudentRole(allowedProfileRoles);
+            if (!selectedRole && allowedProfileRoles && allowedProfileRoles.size > 0) {
+                const fallbackRoleName = ['gerant', 'professor', 'admin'].find(r => allowedProfileRoles.has(r))
+                    || Array.from(allowedProfileRoles)[0];
+                const fallbackRole = await pool.query(
+                    'SELECT id, name FROM roles WHERE LOWER(name) = LOWER($1) LIMIT 1',
+                    [fallbackRoleName]
+                );
+                if (fallbackRole.rows.length > 0) {
+                    selectedRole = fallbackRole.rows[0];
+                }
+            }
         }
 
         if (profileMeta.has('role')) {
@@ -334,7 +379,7 @@ router.post('/student-register', async (req, res) => {
             placeholders.push(`$${paramIndex++}`);
         }
 
-        if (profileMeta.has('profile_image_url') && !profileMeta.get('profile_image_url').is_nullable) {
+        if (profileMeta.has('profile_image_url') && profileMeta.get('profile_image_url').is_nullable === 'NO') {
             insertCols.push('profile_image_url');
             insertVals.push('');
             placeholders.push(`$${paramIndex++}`);
