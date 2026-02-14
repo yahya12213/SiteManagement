@@ -217,11 +217,23 @@ router.post('/student-register', async (req, res) => {
         const idMeta = profileMeta.get('id');
         if (idMeta && !idMeta.column_default) {
             const isUuid = idMeta.data_type === 'uuid' || idMeta.udt_name === 'uuid';
-            if (!isUuid) {
-                return res.status(500).json({ error: 'profiles.id requires a value but is not UUID' });
+            const isStringId = ['character varying', 'text', 'character'].includes(idMeta.data_type)
+                || ['varchar', 'text', 'bpchar'].includes(idMeta.udt_name);
+            const isNumericId = ['integer', 'bigint', 'smallint'].includes(idMeta.data_type)
+                || ['int4', 'int8', 'int2'].includes(idMeta.udt_name);
+
+            let generatedId = null;
+            if (isUuid || isStringId) {
+                generatedId = randomUUID();
+            } else if (isNumericId) {
+                const maxIdResult = await pool.query('SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM profiles');
+                generatedId = maxIdResult.rows[0]?.next_id;
+            } else {
+                generatedId = randomUUID();
             }
+
             insertCols.push('id');
-            insertVals.push(randomUUID());
+            insertVals.push(generatedId);
             placeholders.push(`$${paramIndex++}`);
         }
 
