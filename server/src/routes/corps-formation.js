@@ -4,6 +4,84 @@ import { nanoid } from 'nanoid';
 import { authenticateToken, requirePermission } from '../middleware/auth.js';
 
 const router = express.Router();
+let corpsSchemaReadyPromise = null;
+
+async function ensureCorpsFormationSchema() {
+  if (!corpsSchemaReadyPromise) {
+    corpsSchemaReadyPromise = (async () => {
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS corps_formation (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT,
+            color TEXT DEFAULT '#3B82F6',
+            icon TEXT,
+            order_index INTEGER DEFAULT 0,
+            segment_id TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS color TEXT DEFAULT '#3B82F6'
+        `);
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS icon TEXT
+        `);
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS order_index INTEGER DEFAULT 0
+        `);
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS segment_id TEXT
+        `);
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        `);
+        await client.query(`
+          ALTER TABLE corps_formation
+          ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        `);
+        await client.query(`
+          CREATE INDEX IF NOT EXISTS idx_corps_segment
+          ON corps_formation(segment_id)
+        `);
+
+        await client.query('COMMIT');
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    })();
+  }
+
+  return corpsSchemaReadyPromise;
+}
+
+router.use(async (req, res, next) => {
+  try {
+    await ensureCorpsFormationSchema();
+    next();
+  } catch (error) {
+    console.error('Erreur initialisation schéma corps_formation:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur',
+      details: error.message
+    });
+  }
+});
 
 /**
  * GET /api/corps-formation

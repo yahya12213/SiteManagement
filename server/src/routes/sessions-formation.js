@@ -60,6 +60,110 @@ async function generateCertificateNumber(sessionId) {
 }
 
 const router = express.Router();
+let sessionsSchemaReadyPromise = null;
+
+async function ensureSessionsFormationSchema() {
+  if (!sessionsSchemaReadyPromise) {
+    sessionsSchemaReadyPromise = (async () => {
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS sessions_formation (
+            id TEXT PRIMARY KEY,
+            titre VARCHAR(255) NOT NULL,
+            description TEXT,
+            date_debut DATE,
+            date_fin DATE,
+            ville_id TEXT,
+            segment_id TEXT,
+            statut VARCHAR(50) DEFAULT 'planifiee',
+            prix_total DECIMAL(10, 2) DEFAULT 0,
+            nombre_places INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW()
+          )
+        `);
+
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS corps_formation_id TEXT
+        `);
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS session_type VARCHAR(50) DEFAULT 'presentielle'
+        `);
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS meeting_platform VARCHAR(100)
+        `);
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS meeting_link VARCHAR(500)
+        `);
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS prix_total DECIMAL(10, 2) DEFAULT 0
+        `);
+        await client.query(`
+          ALTER TABLE sessions_formation
+          ADD COLUMN IF NOT EXISTS nombre_places INTEGER DEFAULT 0
+        `);
+
+        const formationIdColumn = await client.query(`
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_schema = 'public'
+            AND table_name = 'sessions_formation'
+            AND column_name = 'formation_id'
+          LIMIT 1
+        `);
+
+        if (formationIdColumn.rows.length > 0) {
+          await client.query(`
+            UPDATE sessions_formation
+            SET corps_formation_id = formation_id
+            WHERE corps_formation_id IS NULL
+              AND formation_id IS NOT NULL
+          `);
+        }
+
+        await client.query(`
+          CREATE INDEX IF NOT EXISTS idx_sessions_formation_corps
+          ON sessions_formation(corps_formation_id)
+        `);
+        await client.query(`
+          CREATE INDEX IF NOT EXISTS idx_sessions_formation_type
+          ON sessions_formation(session_type)
+        `);
+
+        await client.query('COMMIT');
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    })();
+  }
+
+  return sessionsSchemaReadyPromise;
+}
+
+router.use(async (req, res, next) => {
+  try {
+    await ensureSessionsFormationSchema();
+    next();
+  } catch (error) {
+    console.error('Erreur initialisation schéma sessions_formation:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur serveur',
+      details: error.message
+    });
+  }
+});
 
 // ============================================
 // SESSIONS DE FORMATION (CLASSES)
