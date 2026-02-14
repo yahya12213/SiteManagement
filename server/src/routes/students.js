@@ -8,6 +8,16 @@ import { toTitleCase, formatCIN, formatEmail, formatPhone, formatAddress } from 
 
 const router = express.Router();
 
+async function getTableColumns(tableName) {
+  const result = await pool.query(
+    `SELECT column_name
+     FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = $1`,
+    [tableName]
+  );
+  return new Set(result.rows.map(r => r.column_name));
+}
+
 /**
  * Check if student with CIN already exists
  * GET /api/students/check-cin/:cin
@@ -138,18 +148,110 @@ router.get('/with-sessions',
   injectUserScope,
   async (req, res) => {
   try {
-    // Build SBAC scope filter for session's segment and city
-    const scopeFilter = buildScopeFilter(req, 'sf.segment_id', 'sf.ville_id');
+    const studentCols = await getTableColumns('students');
+    const enrollmentCols = await getTableColumns('session_etudiants');
+    const sessionCols = await getTableColumns('sessions_formation');
+    const cityCols = await getTableColumns('cities');
+    const corpsCols = await getTableColumns('corps_formation');
+    const formationCols = await getTableColumns('formations');
+
+    const studentsCreatedAtExpr = studentCols.has('created_at') ? 's.created_at' : 'NULL::timestamp as created_at';
+    const studentsStatusExpr = studentCols.has('statut_compte')
+      ? 's.statut_compte'
+      : (studentCols.has('status') ? 's.status as statut_compte' : "'actif' as statut_compte");
+    const studentsImageExpr = studentCols.has('profile_image_url')
+      ? 's.profile_image_url'
+      : 'NULL::text as profile_image_url';
+
+    const hasJoinTables = enrollmentCols.size > 0 && sessionCols.size > 0;
+    if (!hasJoinTables) {
+      const fallback = await pool.query(`
+        SELECT
+          s.id,
+          s.nom,
+          s.prenom,
+          s.cin,
+          s.phone,
+          s.email,
+          ${studentsStatusExpr},
+          ${studentsImageExpr},
+          ${studentsCreatedAtExpr},
+          NULL::text as enrollment_id,
+          NULL::text as session_id,
+          NULL::text as statut_paiement,
+          0::numeric as montant_total,
+          0::numeric as montant_paye,
+          0::numeric as montant_du,
+          NULL::text as session_titre,
+          NULL::text as session_type,
+          NULL::text as session_statut,
+          NULL::text as ville,
+          NULL::text as formation_titre,
+          false as has_session
+        FROM students s
+        ORDER BY s.nom, s.prenom
+      `);
+      return res.json(fallback.rows);
+    }
+
+    const cityFk = sessionCols.has('ville_id') ? 'ville_id' : (sessionCols.has('city_id') ? 'city_id' : null);
+    const segmentFk = sessionCols.has('segment_id') ? 'segment_id' : null;
+    const scopeFilter = buildScopeFilter(
+      req,
+      segmentFk ? `sf.${segmentFk}` : null,
+      cityFk ? `sf.${cityFk}` : null
+    );
 
     let whereClause = '';
     let params = [];
-
     if (scopeFilter.hasScope) {
-      // User has scope restrictions - only show students in sessions within their scope
       whereClause = `WHERE (${scopeFilter.conditions.join(' OR ')})`;
       params = scopeFilter.params;
     }
-    // If no scope (admin), show all students
+
+    const enrollmentPaymentExpr = enrollmentCols.has('statut_paiement')
+      ? 'se.statut_paiement'
+      : (enrollmentCols.has('payment_status') ? 'se.payment_status as statut_paiement' : 'NULL::text as statut_paiement');
+    const enrollmentTotalExpr = enrollmentCols.has('montant_total')
+      ? 'se.montant_total'
+      : (enrollmentCols.has('total_amount') ? 'se.total_amount as montant_total' : '0::numeric as montant_total');
+    const enrollmentPaidExpr = enrollmentCols.has('montant_paye')
+      ? 'se.montant_paye'
+      : (enrollmentCols.has('paid_amount') ? 'se.paid_amount as montant_paye' : '0::numeric as montant_paye');
+    const enrollmentDueExpr = enrollmentCols.has('montant_du')
+      ? 'se.montant_du'
+      : (enrollmentCols.has('remaining_amount') ? 'se.remaining_amount as montant_du' : '0::numeric as montant_du');
+
+    const sessionTitleExpr = sessionCols.has('titre')
+      ? 'sf.titre'
+      : (sessionCols.has('title') ? 'sf.title as session_titre' : 'sf.id::text as session_titre');
+    const sessionTypeExpr = sessionCols.has('session_type')
+      ? 'sf.session_type'
+      : 'NULL::text as session_type';
+    const sessionStatusExpr = sessionCols.has('statut')
+      ? 'sf.statut'
+      : (sessionCols.has('status') ? 'sf.status as session_statut' : 'NULL::text as session_statut');
+
+    const cityJoin = cityFk && cityCols.size > 0
+      ? `LEFT JOIN cities c ON sf.${cityFk} = c.id`
+      : '';
+    const cityNameExpr = cityFk && cityCols.size > 0 ? 'c.name as ville' : 'NULL::text as ville';
+
+    let formationJoin = '';
+    let formationExpr = 'NULL::text as formation_titre';
+    if (sessionCols.has('corps_formation_id') && corpsCols.size > 0) {
+      formationJoin = 'LEFT JOIN corps_formation cf ON sf.corps_formation_id = cf.id';
+      formationExpr = 'cf.name as formation_titre';
+    } else if (sessionCols.has('formation_id') && formationCols.size > 0) {
+      formationJoin = 'LEFT JOIN formations f ON sf.formation_id = f.id';
+      if (formationCols.has('title') && formationCols.has('nom')) {
+        formationExpr = 'COALESCE(f.title, f.nom) as formation_titre';
+      } else if (formationCols.has('title')) {
+        formationExpr = 'f.title as formation_titre';
+      } else if (formationCols.has('nom')) {
+        formationExpr = 'f.nom as formation_titre';
+      }
+    }
 
     const result = await pool.query(`
       SELECT
@@ -159,26 +261,26 @@ router.get('/with-sessions',
         s.cin,
         s.phone,
         s.email,
-        s.statut_compte,
-        s.profile_image_url,
-        s.created_at,
+        ${studentsStatusExpr},
+        ${studentsImageExpr},
+        ${studentsCreatedAtExpr},
         se.id as enrollment_id,
         se.session_id,
-        se.statut_paiement,
-        se.montant_total,
-        se.montant_paye,
-        se.montant_du,
-        sf.titre as session_titre,
-        sf.session_type,
-        sf.statut as session_statut,
-        c.name as ville,
-        cf.name as formation_titre,
+        ${enrollmentPaymentExpr},
+        ${enrollmentTotalExpr},
+        ${enrollmentPaidExpr},
+        ${enrollmentDueExpr},
+        ${sessionTitleExpr},
+        ${sessionTypeExpr},
+        ${sessionStatusExpr},
+        ${cityNameExpr},
+        ${formationExpr},
         CASE WHEN se.id IS NOT NULL THEN true ELSE false END as has_session
       FROM students s
       LEFT JOIN session_etudiants se ON s.id = se.student_id
       LEFT JOIN sessions_formation sf ON se.session_id = sf.id
-      LEFT JOIN cities c ON sf.ville_id = c.id
-      LEFT JOIN corps_formation cf ON sf.corps_formation_id = cf.id
+      ${cityJoin}
+      ${formationJoin}
       ${whereClause}
       ORDER BY
         CASE WHEN se.id IS NULL THEN 0 ELSE 1 END,
