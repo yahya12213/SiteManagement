@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && cd server && npm install",
+    "build": "npx tsc -b && vite build && cd server && npm install",
     "lint": "eslint .",
     "preview": "serve dist -s -l ${PORT:-8080}",
     "start": "node server/src/index.js"
