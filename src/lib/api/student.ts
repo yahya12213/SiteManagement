@@ -46,16 +46,16 @@ export interface VideoProgressInput {
 export const studentApi = {
     // Public Endpoints
     getPublicFormations: () =>
-        djangoClient.get<any>('/formations/').then((res: { data: any }) =>
+        djangoClient.get<any>('/public/formations').then((res: { data: any }) =>
             // In case it returns PaginatedResponse { count, results } or direct array
             Array.isArray(res.data) ? res.data : (res.data as any).results || []
         ),
 
     getFormationDetails: (slug: string) =>
-        djangoClient.get<Formation>(`/formations/${slug}/`),
+        djangoClient.get<Formation>(`/public/formations/${slug}`),
 
     getCities: () =>
-        djangoClient.get<any[]>('/cities/'),
+        djangoClient.get<any[]>('/public/cities'),
 
     submitContactRequest: (data: any) =>
         djangoClient.post<any>('/contact/', data),

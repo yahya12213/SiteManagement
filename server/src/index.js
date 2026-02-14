@@ -17,6 +17,7 @@ import pool from './config/database.js';
 
 // Import routes
 import segmentsRouter from './routes/segments.js';
+import publicRouter from './routes/public.js';
 import citiesRouter from './routes/cities.js';
 import profilesRouter from './routes/profiles.js';
 import calculationSheetsRouter from './routes/calculationSheets.js';
@@ -307,6 +308,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/api/auth', authRouter);
 app.use('/api/debug-auth', debugAuthRouter); // TEMPORARY: Debug route for auth issues (NO AUTH REQUIRED)
 app.use('/api/segments', authenticateToken, segmentsRouter);
+app.use('/api/public', publicRouter);
 app.use('/api/cities', authenticateToken, citiesRouter);
 app.use('/api/profiles', authenticateToken, profilesRouter);
 app.use('/api/calculation-sheets', authenticateToken, calculationSheetsRouter);
