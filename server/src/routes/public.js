@@ -2,9 +2,116 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { randomUUID } from 'crypto';
+import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 import pool from '../config/database.js';
 
 const router = express.Router();
+
+const EXTERNAL_ALLOWED_ORIGINS = (process.env.EXTERNAL_PUBLIC_ORIGINS || process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(v => v.trim())
+    .filter(Boolean);
+
+const EXTERNAL_STUDENT_JWT_SECRET = process.env.EXTERNAL_STUDENT_JWT_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
+const EXTERNAL_STUDENT_TOKEN_TTL = process.env.EXTERNAL_STUDENT_TOKEN_TTL || '24h';
+
+const publicReadLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 120,
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
+const sensitivePublicLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
+function enforceExternalOrigin(req, res, next) {
+    const origin = req.get('origin');
+    if (!origin) {
+        return next();
+    }
+    if (EXTERNAL_ALLOWED_ORIGINS.includes(origin)) {
+        return next();
+    }
+    return res.status(403).json({ error: 'Origin not allowed' });
+}
+
+function signExternalStudentToken(profile) {
+    return jwt.sign(
+        {
+            type: 'external_student',
+            profile_id: profile.id,
+            username: profile.username,
+            full_name: profile.full_name || '',
+            role: profile.role || ''
+        },
+        EXTERNAL_STUDENT_JWT_SECRET,
+        { expiresIn: EXTERNAL_STUDENT_TOKEN_TTL }
+    );
+}
+
+function extractBearerToken(req) {
+    const auth = req.get('authorization') || '';
+    if (!auth.startsWith('Bearer ')) return null;
+    return auth.slice(7).trim();
+}
+
+function requireExternalStudentToken(req, res, next) {
+    const token = extractBearerToken(req);
+    if (!token) {
+        return res.status(401).json({ error: 'Missing token' });
+    }
+    try {
+        const decoded = jwt.verify(token, EXTERNAL_STUDENT_JWT_SECRET);
+        if (decoded.type !== 'external_student' || !decoded.profile_id) {
+            return res.status(401).json({ error: 'Invalid token type' });
+        }
+        req.externalStudent = decoded;
+        return next();
+    } catch {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+}
+
+async function ensureExternalLeadsTable() {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS external_leads (
+        id TEXT PRIMARY KEY,
+        lead_type TEXT NOT NULL CHECK (lead_type IN ('contact', 'pre_inscription')),
+        full_name TEXT NOT NULL,
+        email TEXT,
+        phone TEXT,
+        city_id TEXT,
+        formation_id TEXT,
+        message TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        payload JSONB,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_external_leads_type_created
+      ON external_leads(lead_type, created_at DESC)
+    `);
+}
+
+async function tableExists(tableName) {
+    const result = await pool.query(
+        `SELECT EXISTS (
+          SELECT 1
+          FROM information_schema.tables
+          WHERE table_schema = 'public'
+            AND table_name = $1
+        ) AS exists`,
+        [tableName]
+    );
+    return !!result.rows[0]?.exists;
+}
 
 async function getFormationColumns() {
     const result = await pool.query(`
@@ -129,7 +236,7 @@ function normalizeCityId(rawCityId, profileMeta) {
  * GET /api/public/formations
  * Public endpoint to list all formations
  */
-router.get('/formations', async (req, res) => {
+router.get('/formations', publicReadLimiter, async (req, res) => {
     try {
         const columns = await getFormationColumns();
 
@@ -186,7 +293,7 @@ router.get('/formations', async (req, res) => {
  * GET /api/public/cities
  * Public endpoint to list all cities
  */
-router.get('/cities', async (req, res) => {
+router.get('/cities', publicReadLimiter, async (req, res) => {
     try {
         const query = `
       SELECT id, name, code, segment_id 
@@ -205,7 +312,7 @@ router.get('/cities', async (req, res) => {
  * GET /api/public/formations/:slug
  * Public endpoint to get formation details
  */
-router.get('/formations/:slug', async (req, res) => {
+router.get('/formations/:slug', publicReadLimiter, async (req, res) => {
     try {
         const { slug } = req.params;
         const columns = await getFormationColumns();
@@ -267,7 +374,7 @@ router.get('/formations/:slug', async (req, res) => {
  * POST /api/public/student-register
  * Public endpoint for Prolean signup. Creates a STUDENT profile in management DB.
  */
-router.post('/student-register', async (req, res) => {
+router.post('/student-register', enforceExternalOrigin, sensitivePublicLimiter, async (req, res) => {
     try {
         const {
             full_name,
@@ -379,6 +486,27 @@ router.post('/student-register', async (req, res) => {
             placeholders.push(`$${paramIndex++}`);
         }
 
+        if (profileMeta.has('status')) {
+            insertCols.push('status');
+            insertVals.push('pending');
+            placeholders.push(`$${paramIndex++}`);
+        }
+        if (profileMeta.has('account_status')) {
+            insertCols.push('account_status');
+            insertVals.push('pending');
+            placeholders.push(`$${paramIndex++}`);
+        }
+        if (profileMeta.has('validation_status')) {
+            insertCols.push('validation_status');
+            insertVals.push('pending');
+            placeholders.push(`$${paramIndex++}`);
+        }
+        if (profileMeta.has('is_active')) {
+            insertCols.push('is_active');
+            insertVals.push(false);
+            placeholders.push(`$${paramIndex++}`);
+        }
+
         if (profileMeta.has('profile_image_url') && profileMeta.get('profile_image_url').is_nullable === 'NO') {
             insertCols.push('profile_image_url');
             insertVals.push('');
@@ -430,6 +558,239 @@ router.post('/student-register', async (req, res) => {
             error: 'Error creating student account',
             details: error.detail || error.message
         });
+    }
+});
+
+/**
+ * POST /api/public/contact-requests
+ * Public endpoint for visitor contact requests.
+ */
+router.post('/contact-requests', enforceExternalOrigin, sensitivePublicLimiter, async (req, res) => {
+    try {
+        const { full_name, email, phone, city_id, message } = req.body || {};
+        if (!full_name || (!email && !phone) || !message) {
+            return res.status(400).json({ error: 'full_name, message and one contact (email or phone) are required' });
+        }
+        await ensureExternalLeadsTable();
+        const id = randomUUID();
+        await pool.query(
+            `INSERT INTO external_leads (id, lead_type, full_name, email, phone, city_id, message, payload)
+             VALUES ($1, 'contact', $2, $3, $4, $5, $6, $7::jsonb)`,
+            [id, String(full_name).trim(), email || null, phone || null, city_id || null, String(message).trim(), JSON.stringify(req.body || {})]
+        );
+        return res.status(201).json({ success: true, id, message: 'Contact request submitted' });
+    } catch (error) {
+        console.error('Error in public contact-requests:', error);
+        return res.status(500).json({ error: 'Error creating contact request' });
+    }
+});
+
+/**
+ * POST /api/public/pre-inscriptions
+ * Public endpoint for pre-inscription requests.
+ */
+router.post('/pre-inscriptions', enforceExternalOrigin, sensitivePublicLimiter, async (req, res) => {
+    try {
+        const { full_name, email, phone, city_id, formation_id, message } = req.body || {};
+        if (!full_name || !formation_id || (!email && !phone)) {
+            return res.status(400).json({ error: 'full_name, formation_id and one contact (email or phone) are required' });
+        }
+        await ensureExternalLeadsTable();
+        const id = randomUUID();
+        await pool.query(
+            `INSERT INTO external_leads (id, lead_type, full_name, email, phone, city_id, formation_id, message, payload)
+             VALUES ($1, 'pre_inscription', $2, $3, $4, $5, $6, $7, $8::jsonb)`,
+            [id, String(full_name).trim(), email || null, phone || null, city_id || null, formation_id, message || null, JSON.stringify(req.body || {})]
+        );
+        return res.status(201).json({ success: true, id, message: 'Pre-inscription submitted' });
+    } catch (error) {
+        console.error('Error in public pre-inscriptions:', error);
+        return res.status(500).json({ error: 'Error creating pre-inscription' });
+    }
+});
+
+/**
+ * POST /api/public/student-login
+ * External website student authentication.
+ */
+router.post('/student-login', enforceExternalOrigin, sensitivePublicLimiter, async (req, res) => {
+    try {
+        const { email, password } = req.body || {};
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const profileMeta = await getProfileColumnsMeta();
+        const whereClauses = ['LOWER(username) = LOWER($1)'];
+        const params = [String(email).trim().toLowerCase()];
+        if (profileMeta.has('email')) {
+            whereClauses.push('LOWER(email) = LOWER($1)');
+        }
+        const result = await pool.query(
+            `SELECT * FROM profiles WHERE ${whereClauses.join(' OR ')} LIMIT 1`,
+            params
+        );
+        if (!result.rows.length) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        const profile = result.rows[0];
+        const passwordHash = profile.password;
+        if (!passwordHash || !(await bcrypt.compare(String(password), String(passwordHash)))) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const statusValue = (profile.status || profile.account_status || profile.validation_status || '').toString().toLowerCase();
+        if (statusValue && ['pending', 'inactive', 'suspended', 'blocked'].includes(statusValue)) {
+            return res.status(403).json({ error: 'Account pending activation', status: statusValue });
+        }
+        if (profileMeta.has('is_active') && profile.is_active === false) {
+            return res.status(403).json({ error: 'Account pending activation', status: 'pending' });
+        }
+
+        const token = signExternalStudentToken(profile);
+        return res.json({
+            success: true,
+            token,
+            expiresIn: EXTERNAL_STUDENT_TOKEN_TTL,
+            student: {
+                id: profile.id,
+                email: profile.email || profile.username,
+                full_name: profile.full_name || '',
+                status: statusValue || 'active'
+            }
+        });
+    } catch (error) {
+        console.error('Error in public student-login:', error);
+        return res.status(500).json({ error: 'Authentication failed' });
+    }
+});
+
+/**
+ * GET /api/public/student/profile
+ * Returns current authenticated external student profile.
+ */
+router.get('/student/profile', requireExternalStudentToken, async (req, res) => {
+    try {
+        const profileResult = await pool.query(
+            'SELECT id, username, full_name, role, created_at FROM profiles WHERE id = $1',
+            [req.externalStudent.profile_id]
+        );
+        if (!profileResult.rows.length) {
+            return res.status(404).json({ error: 'Profile not found' });
+        }
+        const profile = profileResult.rows[0];
+        return res.json({
+            success: true,
+            profile: {
+                id: profile.id,
+                email: profile.username,
+                full_name: profile.full_name || '',
+                role: profile.role || '',
+                created_at: profile.created_at
+            }
+        });
+    } catch (error) {
+        console.error('Error in public student/profile:', error);
+        return res.status(500).json({ error: 'Failed to fetch student profile' });
+    }
+});
+
+/**
+ * GET /api/public/student/dashboard
+ * Returns dashboard data for authenticated external student.
+ */
+router.get('/student/dashboard', requireExternalStudentToken, async (req, res) => {
+    try {
+        const profileId = req.externalStudent.profile_id;
+        const studentTablesExist = await tableExists('students');
+        const sessionTablesExist = await tableExists('session_etudiants') && await tableExists('sessions_formation');
+
+        let profile = {
+            id: profileId,
+            full_name: req.externalStudent.full_name || '',
+            email: req.externalStudent.username || ''
+        };
+        const profileResult = await pool.query(
+            'SELECT id, username, full_name, role, created_at FROM profiles WHERE id = $1',
+            [profileId]
+        );
+        if (profileResult.rows.length) {
+            const p = profileResult.rows[0];
+            profile = { id: p.id, full_name: p.full_name || '', email: p.username || '' };
+        }
+
+        let formations = [];
+        let sessions = [];
+        if (studentTablesExist && sessionTablesExist) {
+            const studentByCin = await pool.query(
+                'SELECT id FROM students WHERE LOWER(cin) = LOWER($1) LIMIT 1',
+                [req.externalStudent.username || '']
+            );
+            if (studentByCin.rows.length) {
+                const studentId = studentByCin.rows[0].id;
+                const sessionCols = await getTableColumns('sessions_formation');
+                const formationCols = await getTableColumns('formations');
+                const hasFormationTable = formationCols.size > 0;
+                const sessionTitleExpr = sessionCols.has('titre')
+                    ? 'sf.titre'
+                    : (sessionCols.has('title') ? 'sf.title' : 'sf.id::text');
+                let formationJoin = '';
+                let formationIdExpr = 'NULL::text';
+                let formationTitleExpr = 'NULL::text';
+                if (hasFormationTable && sessionCols.has('formation_id')) {
+                    formationJoin = 'LEFT JOIN formations f ON sf.formation_id = f.id';
+                    if (formationCols.has('id')) formationIdExpr = 'f.id';
+                    if (formationCols.has('title') && formationCols.has('nom')) {
+                        formationTitleExpr = 'COALESCE(f.title, f.nom, f.code, f.id::text)';
+                    } else if (formationCols.has('title')) {
+                        formationTitleExpr = 'COALESCE(f.title, f.code, f.id::text)';
+                    } else if (formationCols.has('nom')) {
+                        formationTitleExpr = 'COALESCE(f.nom, f.code, f.id::text)';
+                    } else if (formationCols.has('code')) {
+                        formationTitleExpr = 'f.code';
+                    } else {
+                        formationTitleExpr = 'f.id::text';
+                    }
+                }
+
+                const formationQuery = await pool.query(`
+                  SELECT DISTINCT
+                    ${formationIdExpr} AS id,
+                    ${formationTitleExpr} AS title,
+                    sf.id AS session_id,
+                    ${sessionTitleExpr} AS session_title
+                  FROM session_etudiants se
+                  JOIN sessions_formation sf ON sf.id = se.session_id
+                  ${formationJoin}
+                  WHERE se.student_id = $1
+                  ORDER BY session_title ASC
+                `, [studentId]);
+                formations = formationQuery.rows.map(row => ({
+                    id: row.id,
+                    title: row.title || row.session_title,
+                    session_id: row.session_id
+                }));
+                sessions = formationQuery.rows.map(row => ({
+                    id: row.session_id,
+                    title: row.session_title
+                }));
+            }
+        }
+
+        return res.json({
+            success: true,
+            profile,
+            account_status: 'active',
+            stats: {
+                formations_count: formations.length,
+                sessions_count: sessions.length
+            },
+            formations,
+            sessions
+        });
+    } catch (error) {
+        console.error('Error in public student/dashboard:', error);
+        return res.status(500).json({ error: 'Failed to fetch student dashboard' });
     }
 });
 

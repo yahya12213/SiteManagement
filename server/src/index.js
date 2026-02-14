@@ -309,6 +309,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/debug-auth', debugAuthRouter); // TEMPORARY: Debug route for auth issues (NO AUTH REQUIRED)
 app.use('/api/segments', authenticateToken, segmentsRouter);
 app.use('/api/public', publicRouter);
+app.use('/api/public/v1', publicRouter);
 app.use('/api/cities', authenticateToken, citiesRouter);
 app.use('/api/profiles', authenticateToken, profilesRouter);
 app.use('/api/calculation-sheets', authenticateToken, calculationSheetsRouter);
