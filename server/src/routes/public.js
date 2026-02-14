@@ -22,7 +22,7 @@ function hasCol(columns, column) {
 
 async function getProfileColumnsMeta() {
     const result = await pool.query(`
-      SELECT column_name, data_type, udt_name, column_default
+      SELECT column_name, data_type, udt_name, column_default, is_nullable
       FROM information_schema.columns
       WHERE table_schema = 'public'
         AND table_name = 'profiles'
@@ -33,6 +33,27 @@ async function getProfileColumnsMeta() {
         meta.set(row.column_name, row);
     }
     return meta;
+}
+
+function normalizeCityId(rawCityId, profileMeta) {
+    if (!rawCityId || !profileMeta.has('city_id')) {
+        return null;
+    }
+
+    const value = String(rawCityId).trim();
+    if (!value || value.startsWith('fallback-')) {
+        return null;
+    }
+
+    const cityMeta = profileMeta.get('city_id');
+    const isNumericCity = ['integer', 'bigint', 'smallint'].includes(cityMeta.data_type)
+        || ['int4', 'int8', 'int2'].includes(cityMeta.udt_name);
+    if (isNumericCity) {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isNaN(parsed) ? null : parsed;
+    }
+
+    return value;
 }
 
 /**
@@ -243,7 +264,7 @@ router.post('/student-register', async (req, res) => {
             ['email', username],
             ['phone_number', phone_number || null],
             ['cin_or_passport', cin_or_passport || null],
-            ['city_id', city_id || null]
+            ['city_id', normalizeCityId(city_id, profileMeta)]
         ];
 
         const requiredFields = [
@@ -262,7 +283,34 @@ router.post('/student-register', async (req, res) => {
 
         if (profileMeta.has('role')) {
             insertCols.push('role');
-            insertVals.push('STUDENT');
+            insertVals.push('student');
+            placeholders.push(`$${paramIndex++}`);
+        }
+
+        if (profileMeta.has('role_id')) {
+            const roleIdResult = await pool.query(
+                `SELECT id
+                 FROM roles
+                 WHERE LOWER(name) IN ('student', 'etudiant')
+                 ORDER BY CASE WHEN LOWER(name) = 'student' THEN 0 ELSE 1 END
+                 LIMIT 1`
+            );
+            if (roleIdResult.rows.length > 0) {
+                insertCols.push('role_id');
+                insertVals.push(roleIdResult.rows[0].id);
+                placeholders.push(`$${paramIndex++}`);
+            }
+        }
+
+        if (profileMeta.has('created_at') && !profileMeta.get('created_at').column_default) {
+            insertCols.push('created_at');
+            insertVals.push(new Date());
+            placeholders.push(`$${paramIndex++}`);
+        }
+
+        if (profileMeta.has('updated_at') && !profileMeta.get('updated_at').column_default) {
+            insertCols.push('updated_at');
+            insertVals.push(new Date());
             placeholders.push(`$${paramIndex++}`);
         }
 
@@ -289,7 +337,16 @@ router.post('/student-register', async (req, res) => {
         if (error.code === '23505') {
             return res.status(409).json({ error: 'Email already used' });
         }
-        return res.status(500).json({ error: 'Error creating student account' });
+        if (error.code === '23503') {
+            return res.status(400).json({ error: 'Invalid related data (city/role). Please try again.' });
+        }
+        if (error.code === '22P02') {
+            return res.status(400).json({ error: 'Invalid field format in registration payload.' });
+        }
+        return res.status(500).json({
+            error: 'Error creating student account',
+            details: error.detail || error.message
+        });
     }
 });
 
